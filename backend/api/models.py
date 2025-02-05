@@ -3,6 +3,27 @@ from django.contrib.auth.models import User
 from datetime import timedelta, date
 # Un alumno puede tener muchas cuotas asociadas, cada cuota es de un único alumno
 
+# Ejercicios
+class Ejercicio(models.Model):
+    nombre = models.CharField(max_length=100)
+    descripcion = models.TextField()
+    #imagen = models.ImageField(upload_to="ejercicios/", null=True, blank=True)
+    
+    def __str__(self):
+        return self.nombre
+    
+
+class EjercicioAlumno(models.Model):
+    ejercicio = models.ForeignKey(Ejercicio, on_delete=models.CASCADE)
+    alumno = models.ForeignKey("Alumno", on_delete=models.CASCADE)
+    fecha = models.DateField(auto_now_add=True)
+    series = models.IntegerField()
+    repeticiones = models.IntegerField()
+    peso = models.FloatField()
+    
+    def __str__(self):
+        return f"{self.ejercicio} - {self.alumno}"
+    
 # La lista de cuotas es única para todos los alumnos
 class Cuota(models.Model):
     fecha = models.DateField(auto_now_add=True)    
