@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../api";
 import type { AlumnoType } from "../types";
 import Alumno from "../components/Alumno";
-
+import "../styles/Home.css";
 function Home() {
   const [alumnos, setAlumnos] = useState([]);
   const [nombre_apellido, setNombre_apellido] = useState("");

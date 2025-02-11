@@ -5,6 +5,9 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import "bulma/css/bulma.min.css";
+import "./colors.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 function Logout() {
   localStorage.clear();

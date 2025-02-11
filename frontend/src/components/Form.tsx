@@ -2,7 +2,8 @@ import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
-import "../styles/Form.css";
+import { Link } from "react-router-dom";
+import "../styles/Form.css"; // Importamos los estilos
 
 interface Props {
   route: string;
@@ -15,7 +16,7 @@ function Form({ route, method }: Props) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const name = method === "login" ? "Login" : "Register";
+  const name = method === "login" ? "Iniciar Sesión" : "Registrarse";
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setLoading(true);
     e.preventDefault();
@@ -38,26 +39,57 @@ function Form({ route, method }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <h1>{name}</h1>
-      <input
-        className="form-input"
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
-      />
-      <input
-        className="form-input"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <button className="form-button" type="submit">
-        {name}
-      </button>
-    </form>
+    <div className="is-flex is-justify-content-center is-align-items-center auth-container">
+      <div className="box">
+        <h2 className="title has-text-centered has-text-grey-dark">{name}</h2>
+        <div className="field">
+          <p className="control has-icons-left">
+            <input
+              className="input"
+              type="text"
+              placeholder="Nombre de usuario"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <span className="icon is-small is-left">
+              <i className="fas fa-user"></i>
+            </span>
+          </p>
+        </div>
+
+        <div className="field">
+          <div className="control has-icons-left">
+            <input
+              className="input"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Contraseña"
+            />
+            <span className="icon is-small is-left">
+              <i className="fas fa-lock"></i>
+            </span>
+          </div>
+        </div>
+
+        <div className="control">
+          <button
+            className="button is-link is-primary is-fullwidth"
+            type="submit"
+          >
+            {name}
+          </button>
+        </div>
+        {name === "Iniciar Sesión" && (
+          <p className="has-text-centered has-text-grey">
+            ¿No tienes cuenta?{" "}
+            <Link to="/register" className="has-text-primary">
+              Regístrate
+            </Link>
+          </p>
+        )}
+      </div>
+    </div>
   );
 }
 

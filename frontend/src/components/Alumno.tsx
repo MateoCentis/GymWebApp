@@ -1,5 +1,6 @@
 import React from "react";
 import type { AlumnoType } from "../types";
+import "../styles/Alumno.css";
 
 interface Props {
   alumno: AlumnoType;

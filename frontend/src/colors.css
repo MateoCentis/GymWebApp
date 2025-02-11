@@ -1,0 +1,15 @@
+:root {
+  --primary-color: #48c9b0; /* Verde agua */
+  --primary-hover: #3db29e;
+  --background-color: #121212; /* Fondo oscuro */
+  --box-background: #ffffff; /* Caja blanca */
+  --text-color: #4a4a4a; /* Texto principal */
+  --text-muted: #666; /* Texto secundario */
+  --input-background: #f5f5f5; /* Fondo de inputs */
+  --input-text: #333; /* Color del texto en inputs */
+  --link-color: var(--primary-color);
+}
+
+html {
+  background-color: var(--background-color);
+}
