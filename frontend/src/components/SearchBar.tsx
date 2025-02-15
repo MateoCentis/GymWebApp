@@ -27,7 +27,7 @@ function SearchBar({
       {" "}
       <div className="control is-expanded has-icons-left has-icons-right">
         <input
-          className="input is-rounded"
+          className="input is-rounded is-medium"
           type="text"
           placeholder={placeholder}
           value={searchTerm}

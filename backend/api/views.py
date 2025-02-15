@@ -1,128 +1,118 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from rest_framework import generics
-from .serializers import UserSerializer, AlumnoSerializer, CuotaSerializer, CuotaAlumnoSerializer, EjercicioSerializer, EjercicioAlumnoSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import generics, permissions
 from .models import Alumno, Cuota, CuotaAlumno, Ejercicio, EjercicioAlumno
+from .serializers import UserSerializer, AlumnoSerializer, CuotaSerializer, CuotaAlumnoSerializer, EjercicioSerializer, EjercicioAlumnoSerializer
+from django.contrib.auth.models import User
 
 class CreateUserView(generics.CreateAPIView):
-    querySet = User.objects.all()#Lista de todos los objetos, así no creamos uno repetido
-    serializer_class = UserSerializer #Que data aceptamos para crear un nuevo usuario
-    permission_classes = [AllowAny] #Quien puede crear un nuevo usuario
-    
-# Se usa ListCreate ya que te lista todos objetos del usuario y además permite crear nuevos
-class CreateAlumnoView(generics.ListCreateAPIView):
-    serializer_class = AlumnoSerializer
-    permission_classes = [IsAuthenticated] 
-    
-    def get_queryset(self):
-        user = self.request.user
-        return Alumno.objects.filter(agregado_por=user)#Se trae solo los alumnos creados por el user
-    
-    def perform_create(self, serializer):
-        if serializer.is_valid():
-            serializer.save(agregado_por=self.request.user)
-        else:
-            print(serializer.errors)
-            
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
-class DeleteAlumnoView(generics.DestroyAPIView):
+# --- Alumno ---
+class AlumnoView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Alumno.objects.all()
     serializer_class = AlumnoSerializer
-    permission_classes = [IsAuthenticated]
-    
-    def get_queryset(self):
-        user = self.request.user
-        return Alumno.objects.filter(agregado_por=user)#Se trae solo los alumnos creados por el user
+    permission_classes = [permissions.IsAuthenticated]
 
-class CreateCuotaView(generics.ListCreateAPIView):
-    serializer_class = CuotaSerializer
-    permission_classes = [AllowAny]
-    
     def get_queryset(self):
-        return Cuota.objects.all()
-    
-class DeleteCuotaView(generics.DestroyAPIView):
-    serializer_class = CuotaSerializer
-    permission_classes = [AllowAny]
-    
-    def get_queryset(self):
-        return Cuota.objects.all()
-    
-# De acá para abajo mmm (TODO)
-class CreateCuotaAlumnoView(generics.ListCreateAPIView):
-    serializer_class = CuotaAlumnoSerializer
-    permission_classes = [IsAuthenticated]
-    
-    def get_queryset(self):
-        # Se filtran las cuotas de los alumnos que son propiedad del usuario autenticado
         user = self.request.user
-        return CuotaAlumno.objects.filter(alumno__agregado_por=user)
-    
+        return Alumno.objects.filter(agregado_por=user)
+
+    def perform_update(self, serializer):
+        serializer.save(agregado_por=self.request.user)
+
+class AlumnoListView(generics.ListCreateAPIView):  # For creating new Alumnos
+    queryset = Alumno.objects.all()
+    serializer_class = AlumnoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Alumno.objects.filter(agregado_por=user)
+
     def perform_create(self, serializer):
-        # Cuando se crea una nueva CuotaAlumno, asociarla al alumno correspondiente
-        user = self.request.user
-        alumno = self.request.data.get('alumno')  # Suponiendo que el 'alumno' es un campo en el request
-        if alumno:
-            # Validar que el alumno realmente pertenece al usuario
-            alumno_instance = Alumno.objects.get(id=alumno)
-            if alumno_instance.agregado_por == user:
-                serializer.save(alumno=alumno_instance)
-            else:
-                raise ValueError("No puedes asociar una cuota a un alumno que no te pertenece.")
-        else:
-            raise ValueError("Se requiere un ID de alumno.")
-            
-class DeleteCuotaAlumnoView(generics.DestroyAPIView):
+        serializer.save(agregado_por=self.request.user)
+
+
+# --- Cuota ---
+class CuotaView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Cuota.objects.all()
+    serializer_class = CuotaSerializer
+    permission_classes = [permissions.AllowAny]
+
+class CuotaListView(generics.ListCreateAPIView):
+    queryset = Cuota.objects.all()
+    serializer_class = CuotaSerializer
+    permission_classes = [permissions.AllowAny]
+
+# --- CuotaAlumno ---
+class CuotaAlumnoView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CuotaAlumno.objects.all()
     serializer_class = CuotaAlumnoSerializer
-    permission_classes = [IsAuthenticated]
-    
+    permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
-        # Se filtran las cuotas de los alumnos que son propiedad del usuario autenticado
         user = self.request.user
         return CuotaAlumno.objects.filter(alumno__agregado_por=user)
 
-class CreateEjercicioView(generics.ListCreateAPIView):
-    serializer_class = EjercicioSerializer
-    permission_classes = [AllowAny]
-    
-    def get_queryset(self):
-        return Ejercicio.objects.all()
+    def perform_update(self, serializer):
+        serializer.save()  # No need to specify user here
 
-class DeleteEjercicioView(generics.DestroyAPIView):
-    serializer_class = EjercicioSerializer
-    permission_classes = [AllowAny]
-    
-    def get_queryset(self):
-        return Ejercicio.objects.all()
+class CuotaAlumnoListView(generics.ListCreateAPIView):
+    queryset = CuotaAlumno.objects.all()
+    serializer_class = CuotaAlumnoSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-class CreateEjercicioAlumnoView(generics.ListCreateAPIView):
-    serializer_class = EjercicioAlumnoSerializer
-    permission_classes = [IsAuthenticated]
-    
     def get_queryset(self):
-        # Se filtran los ejercicios de los alumnos que son propiedad del usuario autenticado
         user = self.request.user
-        return EjercicioAlumno.objects.filter(alumno__agregado_por=user)
-    
+        return CuotaAlumno.objects.filter(alumno__agregado_por=user)
+
     def perform_create(self, serializer):
-        # Cuando se crea un nuevo EjercicioAlumno, asociarlo al alumno correspondiente
         user = self.request.user
-        alumno = self.request.data.get('alumno')  # Suponiendo que el 'alumno' es un campo en el request
-        if alumno:
-            # Validar que el alumno realmente pertenece al usuario
-            alumno_instance = Alumno.objects.get(id=alumno)
-            if alumno_instance.agregado_por == user:
-                serializer.save(alumno=alumno_instance)
-            else:
-                raise ValueError("No puedes asociar un ejercicio a un alumno que no te pertenece.")
+        alumno = Alumno.objects.get(id=self.request.data.get('alumno'))
+        if alumno.agregado_por == user:
+            serializer.save(alumno=alumno)
         else:
-            raise ValueError("Se requiere un ID de alumno.")
-    
-class DeleteEjercicioAlumnoView(generics.DestroyAPIView):
+            raise ValueError("No puedes asociar una cuota a un alumno que no te pertenece.")
+
+
+# --- Ejercicio ---
+class EjercicioView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ejercicio.objects.all()
+    serializer_class = EjercicioSerializer
+    permission_classes = [permissions.AllowAny]
+
+class EjercicioListView(generics.ListCreateAPIView):
+    queryset = Ejercicio.objects.all()
+    serializer_class = EjercicioSerializer
+    permission_classes = [permissions.AllowAny]
+
+# --- EjercicioAlumno ---
+class EjercicioAlumnoView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = EjercicioAlumno.objects.all()
     serializer_class = EjercicioAlumnoSerializer
-    permission_classes = [IsAuthenticated]
-    
+    permission_classes = [permissions.IsAuthenticated]
+
     def get_queryset(self):
-        # Se filtran los ejercicios de los alumnos que son propiedad del usuario autenticado
         user = self.request.user
         return EjercicioAlumno.objects.filter(alumno__agregado_por=user)
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+class EjercicioAlumnoListView(generics.ListCreateAPIView):
+    queryset = EjercicioAlumno.objects.all()
+    serializer_class = EjercicioAlumnoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return EjercicioAlumno.objects.filter(alumno__agregado_por=user)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        alumno = Alumno.objects.get(id=self.request.data.get('alumno'))
+        if alumno.agregado_por == user:
+            serializer.save(alumno=alumno)
+        else:
+            raise ValueError("No puedes asociar un ejercicio a un alumno que no te pertenece.")

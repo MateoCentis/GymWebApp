@@ -18,6 +18,7 @@ interface AlumnoModalProps {
       "id" | "edad" | "cuotas" | "ejercicios" | "agregado_por"
     >
   ) => void;
+  isCreating: boolean;
 }
 
 const AlumnoModal: React.FC<AlumnoModalProps> = ({
@@ -26,6 +27,7 @@ const AlumnoModal: React.FC<AlumnoModalProps> = ({
   onCreate,
   alumnoToEdit,
   onEdit,
+  isCreating,
 }) => {
   const [alumnoData, setAlumnoData] = useState<
     Omit<AlumnoType, "id" | "edad" | "cuotas" | "ejercicios" | "agregado_por">
@@ -40,30 +42,34 @@ const AlumnoModal: React.FC<AlumnoModalProps> = ({
   });
 
   useEffect(() => {
-    if (alumnoToEdit) {
-      // Editing: Populate form with existing data
-      setAlumnoData({
-        nombre_apellido: alumnoToEdit.nombre_apellido,
-        telefono: alumnoToEdit.telefono,
-        fecha_nacimiento: alumnoToEdit.fecha_nacimiento,
-        sexo: alumnoToEdit.sexo,
-        altura: alumnoToEdit.altura,
-        peso: alumnoToEdit.peso,
-        activo: alumnoToEdit.activo,
-      });
-    } else {
-      // Creating: Reset the form
-      setAlumnoData({
-        nombre_apellido: "",
-        telefono: "",
-        fecha_nacimiento: "",
-        sexo: "M",
-        peso: 0,
-        altura: 0,
-        activo: true,
-      });
+    if (isOpen) {
+      // Runs whenever isOpen changes
+      if (isCreating) {
+        // Check the isCreating prop
+        setAlumnoData({
+          // Reset only when creating
+          nombre_apellido: "",
+          telefono: "",
+          fecha_nacimiento: "",
+          sexo: "M",
+          peso: 0,
+          altura: 0,
+          activo: true,
+        });
+      } else if (alumnoToEdit) {
+        // Editing
+        setAlumnoData({
+          nombre_apellido: alumnoToEdit.nombre_apellido,
+          telefono: alumnoToEdit.telefono,
+          fecha_nacimiento: alumnoToEdit.fecha_nacimiento,
+          sexo: alumnoToEdit.sexo,
+          altura: alumnoToEdit.altura,
+          peso: alumnoToEdit.peso,
+          activo: alumnoToEdit.activo,
+        });
+      }
     }
-  }, [alumnoToEdit]);
+  }, [isOpen, isCreating, alumnoToEdit]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -86,7 +92,9 @@ const AlumnoModal: React.FC<AlumnoModalProps> = ({
       <div className="modal-background" onClick={onClose}></div>
       <div className="modal-card">
         <header className="modal-card-head">
-          <p className="modal-card-title">Crear Alumno</p>
+          <p className="modal-card-title">
+            {alumnoToEdit ? "Editar alumno" : "Agregar Alumno"}
+          </p>
           <button
             className="delete"
             aria-label="close"
@@ -198,7 +206,7 @@ const AlumnoModal: React.FC<AlumnoModalProps> = ({
             <div className="field">
               <div className="control has-text-centered">
                 <button type="submit" className="button is-primary">
-                  {alumnoToEdit ? "Guardar Cambios" : "Crear Alumno"}
+                  {alumnoToEdit ? "Guardar Cambios" : "Agregar Alumno"}
                 </button>
               </div>
             </div>

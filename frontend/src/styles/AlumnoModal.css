@@ -1,42 +1,46 @@
-/* components/AlumnoModal.css */
-.modal-card-body .field {
-  margin-bottom: 0.5rem; /* Reduced vertical space between inputs */
-  width: 50%;
+.modal-card-body {
+  padding: 20px; /* Add some padding to the body */
 }
 
-.modal-card-body .input:focus,
-.modal-card-body select:focus {
-  border-color: var(--accent-color); /* Accent color on focus */
-  box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-rgb), 0.25); /* Subtle focus ring */
+.modal-card-body .field {
+  margin-bottom: 1rem; /* Increased vertical space between inputs */
+  width: 100%; /* Make inputs full width */
+}
+
+.modal-card-body .label {
+  font-weight: bold; /* Make labels bolder */
+  margin-bottom: 0.3rem; /* Small space between label and input */
 }
 
 .modal-card-body .checkbox input:focus + span {
-  /* Style the label next to the checkbox */
-  outline: 2px solid var(--accent-color); /* Example styling */
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
+.modal-card-body .is-grouped {
+  display: flex;
+  align-items: center;
+}
+
+.modal-card-body .ml-2 {
+  margin-left: 0.5rem;
+}
+
+.modal-card-body .button.is-primary {
+  /* Style the button */
+  width: 100%; /* Full width button */
+  padding: 0.8rem;
+  font-weight: bold;
+  background-color: var(--accent-color);
+  color: white;
+}
+
 .has-text-centered {
-  /* Center the button */
   text-align: center;
 }
 
-.input-width {
-  /* Adjust the size of the inputs */
-  width: 50% !important; /* Example width */
-}
-
-.is-grouped {
-  /* Group the checkbox and label */
-  display: flex;
-  align-items: center; /* Vertically align items */
-}
-
-.ml-2 {
-  /* Add some left margin */
-  margin-left: 0.5rem; /* Example margin */
-}
-
-.columns .column {
-  padding: 0.5rem; /* Adjust padding between columns */
+@media (max-width: 768px) {
+  .modal-card-body .field {
+    margin-bottom: 0.8rem;
+  }
 }

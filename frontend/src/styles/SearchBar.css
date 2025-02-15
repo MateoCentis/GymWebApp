@@ -2,10 +2,17 @@
   display: flex;
   justify-content: center;
   margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.color-boton-searchbar {
+  border-color: var(--accent-color) !important;
+  color: white !important;
 }
 
 .search-bar-wrapper {
   width: 40%;
+  /* display: flex; */
 }
 
 /* Search Bar Styles */

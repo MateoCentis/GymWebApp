@@ -17,7 +17,7 @@ function Home() {
   const [alumnos, setAlumnos] = useState<AlumnoType[]>([]); //Data de la tabla
   const [isModalOpen, setIsModalOpen] = useState(false); // Para crear alumnos
   const [alumnoToEdit, setAlumnoToEdit] = useState<AlumnoType | null>(null); // Para editar un alumno
-
+  const [isCreating, setIsCreating] = useState(false);
   // Tabla
   const [sortKey, setSortKey] = useState<keyof AlumnoType | null>(null); // State for sorting
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
@@ -42,17 +42,25 @@ function Home() {
       title: "Acciones", // Added actions column
       key: "actions",
       render: (item: AlumnoType) => (
-        <div>
+        <div className="d-flex align-items-center">
           <button
-            className="button is-small is-info" // Added edit button
+            className="button is-small is-primary mr-2" // Added edit button
+            // onClick={() => openEditModal(item)}
+          >
+            Info
+          </button>
+          <button
+            className="button is-small is-info mr-2" // Added edit button
             onClick={() => openEditModal(item)}
-          ></button>
+          >
+            Editar
+          </button>
           <button
             className="button is-small is-danger"
             onClick={() => deleteAlumno(item.id)}
           >
             Eliminar
-          </button>{" "}
+          </button>
         </div>
       ),
       sortable: false,
@@ -79,17 +87,6 @@ function Home() {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  // Editar alumno
-  const openEditModal = (alumno: AlumnoType) => {
-    setAlumnoToEdit(alumno);
-    setIsModalOpen(true); // Open the same modal for editing
-  };
-
-  const closeEditModal = () => {
-    setAlumnoToEdit(null); // Clear the alumno to edit
-    closeModal(); // Close the modal
   };
 
   const handleEditAlumno = async (
@@ -133,8 +130,26 @@ function Home() {
       .catch((error) => alert(error));
   };
 
-  const openModal = () => setIsModalOpen(true);
+  // Modal para abrir
+  const openModal = () => {
+    setIsCreating(true);
+    setAlumnoToEdit(null); // Clear alumnoToEdit (important!)
+    setIsModalOpen(true);
+  };
   const closeModal = () => setIsModalOpen(false);
+
+  // Modal para editar
+  const closeEditModal = () => {
+    setIsCreating(false); // Reset to false
+    setAlumnoToEdit(null);
+    closeModal();
+  };
+
+  const openEditModal = (alumno: AlumnoType) => {
+    setIsCreating(false); // Set to false when opening for editing
+    setAlumnoToEdit(alumno);
+    setIsModalOpen(true);
+  };
 
   const handleCreateAlumno = async (
     newAlumnoData: Omit<
@@ -147,6 +162,8 @@ function Home() {
       if (res.status === 201) {
         alert("Alumno creado");
         getAlumnos();
+        closeEditModal();
+        setIsCreating(false);
       } else {
         alert("Fallo al crear alumno");
       }
@@ -243,16 +260,13 @@ function Home() {
             leftIcon="search"
             rightIcon="user-circle"
           />
-          <div>
-            <AlumnoModal
-              isOpen={isModalOpen}
-              onClose={closeModal}
-              onCreate={handleCreateAlumno}
-              alumnoToEdit={alumnoToEdit}
-              onEdit={handleEditAlumno}
-            />
-          </div>
         </div>
+        <button
+          className="button ml-3 is-responsive is-outlined color-boton-searchbar"
+          onClick={openModal}
+        >
+          Agregar
+        </button>
       </div>
       <div className="table-container">
         <Table
@@ -262,12 +276,14 @@ function Home() {
         />
       </div>
       <div>
-        <p className="table-footer">
-          {sortedAndFilteredAlumnos.length} alumnos
-        </p>
-        <button className="button is-primary" onClick={openModal}>
-          Crear Alumno
-        </button>
+        <AlumnoModal
+          isOpen={isModalOpen}
+          onClose={closeEditModal}
+          onCreate={handleCreateAlumno}
+          alumnoToEdit={alumnoToEdit}
+          onEdit={handleEditAlumno}
+          isCreating={isCreating}
+        />
       </div>
     </div>
   );
