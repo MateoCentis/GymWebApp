@@ -1,7 +1,12 @@
 export interface AlumnoType {
   id: number;
+  agregado_por: number;
   nombre_apellido: string;
+  fecha_nacimiento: string | null;
+  peso: number | null;
+  sexo: string;
+  altura: number | null;
   telefono: string;
-  fecha_inicio_gym: string; // Django lo manda como string en formato "YYYY-MM-DD"
   activo: boolean;
+  cuotas: number[];
 }

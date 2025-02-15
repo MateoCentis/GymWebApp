@@ -1,0 +1,131 @@
+.navbar {
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos del logo */
+.navbar-brand .navbar-item.logo-container {
+  display: flex;
+  height: 100%;
+  width: auto;
+  flex-grow: 1;
+  margin-right: 2rem;
+  margin-left: 1.5rem;
+}
+
+.navbar-brand .navbar-item.logo-container:hover {
+  background-color: transparent;
+  cursor: default;
+}
+
+.logo {
+  height: 100px;
+  width: auto;
+}
+
+/* Logo */
+.navbar-brand .navbar-item img.logo {
+  max-height: auto;
+  object-fit: contain;
+  max-width: 100%;
+  transform: scale(4, 4);
+}
+
+/* Estilos items de la navbar */
+.navbar-item {
+  font-weight: 600;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-item:hover {
+  background-color: rgba(40, 131, 79, 0.1);
+}
+
+.navbar-link {
+  color: #333;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.navbar-link:hover {
+  color: var(--accent-color);
+}
+
+.navbar-item.active .navbar-link,
+.navbar-item:not(.has-dropdown) .navbar-link[aria-current="page"] {
+  color: var(--accent-color);
+}
+
+.navbar-item.active::after,
+.navbar-item:not(.has-dropdown) .navbar-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 7px;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 3px;
+  background-color: var(--accent-color);
+  transition: background-color 0.3s ease;
+}
+
+/* Estilos dropdown */
+.navbar-dropdown .navbar-item {
+  transition: color 0.3s ease;
+}
+
+.navbar-dropdown .navbar-item:hover {
+  color: var(--accent-color);
+}
+
+/* Estilos burguer */
+.navbar-burger {
+  margin-left: auto;
+  color: var(--accent-color) !important;
+}
+
+/* Estilos botón */
+.navbar-end-button {
+  background-color: #dc3545 !important;
+  color: white !important;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.navbar-end-button:hover {
+  background-color: #c9302c !important;
+  color: white;
+}
+
+.buttons .button {
+  margin-left: 0.5rem; /* Space between buttons */
+}
+
+@media (max-width: 768px) {
+  .navbar-menu {
+    padding: 0.5rem; /* Reduce padding on smaller screens */
+  }
+
+  .navbar-item {
+    padding: 0.5rem 1rem; /* Reduce item padding */
+  }
+}
+
+@media (max-width: 1023px) {
+  /* Bulma's mobile breakpoint */
+  .navbar-item.active::after,
+  .navbar-item:not(.has-dropdown) .navbar-link[aria-current="page"]::after {
+    /* Change positioning for mobile */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 4px; /* Make it a vertical line instead */
+    height: 100%; /* Full height of the item */
+    margin: 0; /* Remove horizontal margins */
+  }
+}

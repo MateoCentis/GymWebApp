@@ -1,0 +1,48 @@
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: auto;
+}
+
+.table-div {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 50vh;
+}
+
+.table td,
+table th {
+  word-wrap: break-word !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  position: sticky !important;
+}
+
+.table-body-scroll {
+  overflow-y: auto;
+  max-height: 30vh;
+  table-layout: fixed;
+}
+
+.table-header-sortable {
+  cursor: pointer;
+}
+
+.table-header-hover {
+  background-color: var(--accent-color) !important; /* Use !important */
+  transition: background-color 0.3s ease;
+}
+
+/* Estilos Scrollbar */
+/* WebKit browsers (Chrome, Safari) */
+.table-div {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) var(--background-color);
+}

@@ -1,87 +1,275 @@
 import { useState, useEffect } from "react";
 import api from "../api";
-import type { AlumnoType } from "../types";
-import Alumno from "../components/Alumno";
+//Componentes
+import Nabvar from "../components/Navbar";
+import Table from "../components/Table";
+import SearchBar from "../components/SearchBar";
+import AlumnoModal from "../components/AlumnoModal";
+//Tipos
+import { AlumnoType } from "../types";
+//Estilos
 import "../styles/Home.css";
-function Home() {
-  const [alumnos, setAlumnos] = useState([]);
-  const [nombre_apellido, setNombre_apellido] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [activo, setActivo] = useState(true);
+import "../styles/SearchBar.css";
+import "../styles/Title.css";
+import "../styles/Table.css";
 
+function Home() {
+  const [alumnos, setAlumnos] = useState<AlumnoType[]>([]); //Data de la tabla
+  const [isModalOpen, setIsModalOpen] = useState(false); // Para crear alumnos
+  const [alumnoToEdit, setAlumnoToEdit] = useState<AlumnoType | null>(null); // Para editar un alumno
+
+  // Tabla
+  const [sortKey, setSortKey] = useState<keyof AlumnoType | null>(null); // State for sorting
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  // Barra
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Tabla
+  const tableColumns = [
+    // { title: "ID", key: "id" }, //
+    { title: "Nombre y Apellido", key: "nombre_apellido", sortable: true },
+    { title: "Teléfono", key: "telefono", sortable: false },
+    { title: "Edad", key: "edad", sortable: true },
+    { title: "Altura (cm)", key: "altura", sortable: true },
+    { title: "Peso (kg)", key: "peso", sortable: true },
+    {
+      title: "Activo",
+      key: "activo",
+      render: (item: AlumnoType) => (item.activo ? "Sí" : "No"),
+    }, // TODO: agregar un check donde se quiera mostrar o no el activo
+    {
+      title: "Acciones", // Added actions column
+      key: "actions",
+      render: (item: AlumnoType) => (
+        <div>
+          <button
+            className="button is-small is-info" // Added edit button
+            onClick={() => openEditModal(item)}
+          ></button>
+          <button
+            className="button is-small is-danger"
+            onClick={() => deleteAlumno(item.id)}
+          >
+            Eliminar
+          </button>{" "}
+        </div>
+      ),
+      sortable: false,
+    },
+  ];
+
+  // Hook
   useEffect(() => {
     getAlumnos();
   }, []);
 
-  const getAlumnos = () => {
-    api
-      .get("/api/alumnos/")
-      .then((res) => res.data)
-      .then((data) => {
-        setAlumnos(data);
-        console.log(data);
-      })
-      .catch((error) => alert(error));
+  // Funciones
+
+  // Traer alumnos
+  const getAlumnos = async () => {
+    try {
+      const res = await api.get("/api/alumnos/");
+      const data = res.data as AlumnoType[];
+      const alumnosWithAgeCalculated = data.map((alumno) => ({
+        ...alumno,
+        edad: calculateAge(alumno.fecha_nacimiento),
+      }));
+      setAlumnos(alumnosWithAgeCalculated);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  // Editar alumno
+  const openEditModal = (alumno: AlumnoType) => {
+    setAlumnoToEdit(alumno);
+    setIsModalOpen(true); // Open the same modal for editing
+  };
+
+  const closeEditModal = () => {
+    setAlumnoToEdit(null); // Clear the alumno to edit
+    closeModal(); // Close the modal
+  };
+
+  const handleEditAlumno = async (
+    editedAlumnoData: Omit<
+      AlumnoType,
+      "id" | "edad" | "cuotas" | "ejercicios" | "agregado_por"
+    >
+  ) => {
+    if (!alumnoToEdit) return; // Solo si hay un alumno para editar
+
+    try {
+      const res = await api.put(
+        `/api/alumnos/${alumnoToEdit.id}/`, // Use PUT for updates
+        editedAlumnoData
+      );
+      if (res.status === 200) {
+        alert("Alumno modificado");
+        getAlumnos(); // Refresh the alumno list
+        closeEditModal(); // Close the modal
+      } else {
+        alert("Fallo al modificar alumno");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  // Eliminar alumno
   const deleteAlumno = (idAlumno: number) => {
+    const encodedId = encodeURIComponent(idAlumno.toString());
     api
-      .delete(`/api/alumnos/delete/${idAlumno}/`)
+      .delete(`/api/alumnos/${encodedId}/`)
       .then((res) => {
-        if (res.status === 204) alert("Alumno eliminado");
-        else alert("Fallo al eliminar alumno");
-        getAlumnos(); //No deberiamos traer todo de nuevo sino que deberíamos borrar el alumno de la lista (TODO)
+        if (res.status === 204) {
+          alert("Alumno eliminado");
+          setAlumnos(alumnos.filter((alumno) => alumno.id !== idAlumno));
+        } else {
+          alert("Fallo al eliminar alumno");
+        }
       })
       .catch((error) => alert(error));
   };
 
-  const createAlumno = (e: React.FormEvent) => {
-    e.preventDefault();
-    api
-      .post("/api/alumnos/", { nombre_apellido, telefono, activo })
-      .then((res) => {
-        if (res.status === 201) alert("Alumno creado");
-        else alert("Fallo al crear alumno");
-        getAlumnos(); // Acá lo mismo (TODO)
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleCreateAlumno = async (
+    newAlumnoData: Omit<
+      AlumnoType,
+      "id" | "edad" | "cuotas" | "ejercicios" | "agregado_por"
+    >
+  ) => {
+    try {
+      const res = await api.post("/api/alumnos/", newAlumnoData);
+      if (res.status === 201) {
+        alert("Alumno creado");
+        getAlumnos();
+      } else {
+        alert("Fallo al crear alumno");
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const handleSort = (key: keyof AlumnoType) => {
+    if (key === sortKey) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
+
+  const columnsWithProps = tableColumns.map((column) => ({
+    ...column,
+    headerProps: {
+      onClick: column.sortable
+        ? () => handleSort(column.key as keyof AlumnoType)
+        : undefined,
+      style: column.sortable ? { cursor: "pointer" } : undefined,
+    },
+  }));
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+  };
+
+  const filteredAlumnos = alumnos.filter((alumno) => {
+    const fullName = alumno?.nombre_apellido?.toLowerCase() ?? "";
+    return fullName.includes(searchTerm.toLowerCase());
+  });
+
+  const sortedAndFilteredAlumnos = sortKey
+    ? [...filteredAlumnos].sort((a, b) => {
+        const aValue = a[sortKey];
+        const bValue = b[sortKey];
+
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          return (
+            aValue.localeCompare(bValue) * (sortDirection === "asc" ? 1 : -1)
+          ); // Correct string comparison
+        } else if (typeof aValue === "number" && typeof bValue === "number") {
+          return (aValue - bValue) * (sortDirection === "asc" ? 1 : -1); // Correct number comparison
+        } else if (typeof aValue === "boolean" && typeof bValue === "boolean") {
+          return (
+            (aValue === bValue ? 0 : aValue ? -1 : 1) *
+            (sortDirection === "asc" ? 1 : -1)
+          );
+        } else if (aValue === undefined || aValue === null) {
+          // Handle undefined and null
+          return -1; // Put undefined/null at the beginning
+        } else if (bValue === undefined || bValue === null) {
+          return 1; // Put undefined/null at the beginning
+        } else {
+          return 0; // Default case (should be handled more specifically if possible)
+        }
       })
-      .catch((error) => alert(error));
+    : filteredAlumnos;
+
+  const calculateAge = (
+    fechaNacimiento: string | null | undefined
+  ): number | null => {
+    if (!fechaNacimiento) return null;
+    const birthDate = new Date(fechaNacimiento);
+    const currentDate = new Date();
+
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const monthDiff = currentDate.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
   };
   return (
     <div>
-      <div>
-        <h2> Alumnos </h2>
-        {alumnos.map((alumno: AlumnoType) => (
-          <Alumno alumno={alumno} onDelete={deleteAlumno} key={alumno.id} />
-        ))}
+      <Nabvar />
+      <div className="title-container">
+        <h1 className="title is-family-sans-serif">Alumnos</h1>
       </div>
-      <h2> Crear Alumno </h2>
-      <form onSubmit={createAlumno}>
-        <label htmlFor="nombre_apellido"> Nombre y apellido:</label>
-        <br />
-        <input
-          type="text"
-          id="nombre_apellido"
-          name="nombre_apellido"
-          required
-          value={nombre_apellido}
-          onChange={(e) => setNombre_apellido(e.target.value)}
+      <div className="search-bar-container">
+        <div className="search-bar-wrapper">
+          <SearchBar
+            onSearch={handleSearch}
+            placeholder="Buscar alumnos"
+            leftIcon="search"
+            rightIcon="user-circle"
+          />
+          <div>
+            <AlumnoModal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              onCreate={handleCreateAlumno}
+              alumnoToEdit={alumnoToEdit}
+              onEdit={handleEditAlumno}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="table-container">
+        <Table
+          items={sortedAndFilteredAlumnos}
+          columns={columnsWithProps}
+          className="is-fullwidth is-striped is-hoverable is-bordered"
         />
-        <label htmlFor="telefono"> Telefono:</label>
-        <br />
-        <input
-          type="tel"
-          id="telefono"
-          name="telefono"
-          required
-          maxLength={20}
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-        />
-        <br />
-        <input type="submit" value="Submit"></input>
-      </form>
+      </div>
+      <div>
+        <p className="table-footer">
+          {sortedAndFilteredAlumnos.length} alumnos
+        </p>
+        <button className="button is-primary" onClick={openModal}>
+          Crear Alumno
+        </button>
+      </div>
     </div>
   );
 }
-
 export default Home;

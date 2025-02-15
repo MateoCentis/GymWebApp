@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import timedelta, date
-# Un alumno puede tener muchas cuotas asociadas, cada cuota es de un único alumno
 
 # Ejercicios
 class Ejercicio(models.Model):
@@ -11,13 +10,13 @@ class Ejercicio(models.Model):
     
     def __str__(self):
         return self.nombre
-    
 
 class EjercicioAlumno(models.Model):
     ejercicio = models.ForeignKey(Ejercicio, on_delete=models.CASCADE)
     alumno = models.ForeignKey("Alumno", on_delete=models.CASCADE)
     fecha = models.DateField(auto_now_add=True)
     series = models.IntegerField()
+    peso_repeticion_maxima = models.IntegerField(default=0)
     repeticiones = models.IntegerField()
     peso = models.FloatField()
     
@@ -49,10 +48,14 @@ class Alumno(models.Model):
     
     agregado_por = models.ForeignKey(User, on_delete=models.CASCADE, related_name="alumnos")
     cuotas = models.ManyToManyField(Cuota, through="CuotaAlumno")
+    ejercicios = models.ManyToManyField(Ejercicio, through="EjercicioAlumno")
     
     nombre_apellido = models.CharField(max_length=100, blank=False)
     telefono = models.CharField(max_length=20)
-    fecha_inicio_gym = models.DateField(auto_now_add=True)
+    fecha_nacimiento = models.DateField(default=date.min)
+    sexo = models.CharField(max_length=1, choices=[("M", "Masculino"), ("F", "Femenino")], default="M")
+    peso = models.FloatField(default=0)
+    altura = models.IntegerField(default=0)
     activo = models.BooleanField(default=True)
     
     def monto_total_cuotas_sin_pagar(self):

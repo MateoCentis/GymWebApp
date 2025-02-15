@@ -1,10 +1,15 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// Importe de páginas
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
+import Cuotas from "./pages/Cuotas";
+import Datos from "./pages/Datos";
+import Ejercicios from "./pages/Ejercicios";
 import NotFound from "./pages/NotFound";
+// Importe de componentes
 import ProtectedRoute from "./components/ProtectedRoute";
+// Importe de estilos (importa el orden)
 import "bulma/css/bulma.min.css";
 import "./colors.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -22,8 +27,6 @@ function RegisterAndLogout() {
 }
 
 function App() {
-  // No se puede acceder a Home si no tenemos el token
-  // Protected route puede ser usado para cualquier componente
   return (
     <BrowserRouter>
       <Routes>
@@ -38,6 +41,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
+        <Route path="/cuotas" element={<Cuotas />} />
+        <Route path="/datos" element={<Datos />} />
+        <Route path="/ejercicios" element={<Ejercicios />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

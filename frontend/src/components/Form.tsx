@@ -42,6 +42,7 @@ function Form({ route, method }: Props) {
     <div className="is-flex is-justify-content-center is-align-items-center auth-container">
       <div className="box">
         <h2 className="title has-text-centered has-text-grey-dark">{name}</h2>
+
         <div className="field">
           <p className="control has-icons-left">
             <input
@@ -76,6 +77,9 @@ function Form({ route, method }: Props) {
           <button
             className="button is-link is-primary is-fullwidth"
             type="submit"
+            onClick={handleSubmit}
+            disabled={loading}
+            style={{ marginBottom: "5px" }}
           >
             {name}
           </button>

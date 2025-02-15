@@ -1,13 +1,15 @@
 :root {
+  --background-color: #121212; /* Fondo oscuro*/
+  --accent-color: #1f8746; /* Verde garden */
+  --accent-color-rgb: 40, 131, 79;
   --primary-color: #48c9b0; /* Verde agua */
-  --primary-hover: #3db29e;
-  --background-color: #121212; /* Fondo oscuro */
-  --box-background: #ffffff; /* Caja blanca */
+  --primary-hover: #28834f;
   --text-color: #4a4a4a; /* Texto principal */
   --text-muted: #666; /* Texto secundario */
   --input-background: #f5f5f5; /* Fondo de inputs */
   --input-text: #333; /* Color del texto en inputs */
   --link-color: var(--primary-color);
+  --subtle-accent: rgba(40, 131, 79, 0.1); /* Color de acento más tranqui */
 }
 
 html {

@@ -1,0 +1,29 @@
+.title-container {
+  text-align: center !important;
+  margin-top: 20px !important;
+}
+
+.title {
+  /* Or .page-title-container .title */
+  /* font-weight: bold !important; */
+  font-size: 4rem !important;
+  /* color: #28834f !important; */
+}
+/* Responsive adjustments (example) */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+  .subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* El color verde
+RGBA (Red, Green, Blue, Alpha) = 40, 131, 79, 255
+HSB (Hue, Saturation, Brightness) = 145.7°, 69.5%, 51.4%
+CMYK (Cyan, Magenta, Yellow, Key) = 69.5%, 0.0%, 39.7%, 48.6%
+Hex (RGB, RGBA, ARGB) = #28834F, #28834FFF, #FF28834F
+Decimal (RGB, RGBA, ARGB) = 2655055, 679694335, -14122161
+Cursor position (X, Y) = 1115, 780
+*/

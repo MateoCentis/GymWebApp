@@ -1,0 +1,54 @@
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.search-bar-wrapper {
+  width: 40%;
+}
+
+/* Search Bar Styles */
+.search-bar-container .field.has-addons .control .input {
+  border-color: var(--accent-color); /* Accent color border */
+  /* Other input styles as needed */
+}
+
+.search-bar-container .field.has-addons .control .input:focus {
+  border-color: var(--accent-color); /* Accent color border on focus */
+  box-shadow: 0 0 0 0.2rem rgba(40, 131, 79, 0.25); /* Subtle green focus ring */
+  outline: none; /* Remove default outline */
+}
+
+.search-bar-container .field.has-addons .control .button.is-info {
+  background-color: var(--accent-color); /* Accent color button background */
+  border-color: var(--accent-color); /* Accent color button border */
+  color: white; /* White text for contrast */
+}
+
+.search-bar-container .field.has-addons .control .button.is-info:hover {
+  background-color: #1f613c; /* Darker green on hover */
+  border-color: #1f613c;
+}
+
+.search-bar-container .field.has-addons .control .button.is-info:focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 131, 79, 0.5); /* Green focus ring */
+  outline: none; /* Remove default outline */
+}
+
+.search-bar-container .field.has-addons .control .input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.2rem rgba(40, 131, 79, 0.25); /* Green focus ring */
+  outline: none; /* Remove default outline */
+}
+
+.search-bar-container .field.has-addons .control .button.is-info:focus {
+  box-shadow: 0 0 0 0.2rem rgba(40, 131, 79, 0.5); /* Green focus ring */
+  outline: none; /* Remove default outline */
+}
+
+/* Íconos */
+.search-bar-container .field.has-addons .control .input:focus + .icon,
+.search-bar-container .field.has-addons .control .input:focus ~ .icon {
+  color: var(--accent-color); /* Icon color on input focus */
+}

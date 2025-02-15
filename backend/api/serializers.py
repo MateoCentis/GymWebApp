@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 class AlumnoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Alumno
-        fields = ["id","agregado_por", "nombre_apellido", "telefono", "fecha_inicio_gym", "activo", "cuotas"]
+        fields = ["id","agregado_por", "nombre_apellido","fecha_nacimiento","peso","altura","sexo", "telefono", "activo", "cuotas","ejercicios"]
         extra_kwargs = {"agregado_por": {"read_only": True}}
         
 class CuotaSerializer(serializers.ModelSerializer):
