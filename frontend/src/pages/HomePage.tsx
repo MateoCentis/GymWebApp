@@ -8,10 +8,10 @@ import AlumnoModal from "../components/AlumnoModal";
 //Tipos
 import { AlumnoType } from "../types";
 //Estilos
-import "../styles/Home.css";
 import "../styles/SearchBar.css";
 import "../styles/Title.css";
 import "../styles/Table.css";
+import Footer from "../components/Footer";
 
 function Home() {
   const [alumnos, setAlumnos] = useState<AlumnoType[]>([]); //Data de la tabla
@@ -285,6 +285,7 @@ function Home() {
           isCreating={isCreating}
         />
       </div>
+      <Footer />
     </div>
   );
 }

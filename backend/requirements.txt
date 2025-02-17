@@ -6,5 +6,6 @@ djangorestframework-simplejwt
 PyJWT
 pytz
 sqlparse
+Pillow
 psycopg2-binary
 python-dotenv

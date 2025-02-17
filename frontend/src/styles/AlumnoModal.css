@@ -12,11 +12,6 @@
   margin-bottom: 0.3rem; /* Small space between label and input */
 }
 
-.modal-card-body .checkbox input:focus + span {
-  outline: 2px solid var(--accent-color);
-  outline-offset: 2px;
-}
-
 .modal-card-body .is-grouped {
   display: flex;
   align-items: center;

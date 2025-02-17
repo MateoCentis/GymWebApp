@@ -7,16 +7,17 @@
   /* Or .page-title-container .title */
   /* font-weight: bold !important; */
   font-size: 4rem !important;
+  text-shadow: 2px 2px 4px gray;
+
   /* color: #28834f !important; */
 }
 /* Responsive adjustments (example) */
 @media (max-width: 768px) {
   .title {
     font-size: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Adjust values for smaller screens */
   }
-  .subtitle {
-    font-size: 1rem;
-  }
+  /* ... other styles ... */
 }
 
 /* El color verde

@@ -1,0 +1,22 @@
+.select select {
+  border-color: var(--accent-color);
+}
+
+.select:hover select {
+  border-color: var(--accent-color);
+}
+
+.field .label {
+  margin-bottom: 0.3rem;
+  margin-left: 0.1rem;
+}
+
+.select select:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-rgb), 0.25); /* Optional: Subtle focus ring */
+}
+
+.select.is-accent::after {
+  border-color: rgba(var(--accent-color-rgb)) !important;
+}

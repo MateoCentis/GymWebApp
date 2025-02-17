@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 // Importe de páginas
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Home from "./pages/Home";
-import Cuotas from "./pages/Cuotas";
+import Home from "./pages/HomePage";
+import Cuotas from "./pages/CuotasPage";
 import Datos from "./pages/Datos";
 import Ejercicios from "./pages/Ejercicios";
 import NotFound from "./pages/NotFound";

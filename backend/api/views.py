@@ -69,11 +69,22 @@ class CuotaAlumnoListView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         user = self.request.user
-        alumno = Alumno.objects.get(id=self.request.data.get('alumno'))
+        alumno = Alumno.objects.get(id=self.request.data.get('alumno'))  # Get alumno ID
+        cuota = Cuota.objects.get(id=self.request.data.get('cuota'))  # Get cuota ID
+
         if alumno.agregado_por == user:
-            serializer.save(alumno=alumno)
+            plan = int(self.request.data.get('plan'))  # Get selected plan
+
+            cuota_alumno = CuotaAlumno(alumno=alumno, cuota=cuota, plan=plan)
+            monto_pagado = cuota_alumno.monto_final_cuota()  # Calculate monto_pagado
+            cuota_alumno.monto_pagado = monto_pagado # Assign it
+
+            cuota_alumno.save() # Save the object so the id exists
+            serializer = CuotaAlumnoSerializer(cuota_alumno) # Serialize the object
+            serializer.is_valid(raise_exception=True) # Check if the serialization is correct
+            serializer.save() # Save the object
         else:
-            raise ValueError("No puedes asociar una cuota a un alumno que no te pertenece.")
+            raise serializers.ValidationError("No puedes asociar una cuota a un alumno que no te pertenece.") # Raise a validation error
 
 
 # --- Ejercicio ---
