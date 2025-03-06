@@ -1,0 +1,43 @@
+.stylish-input {
+  color: #ffffff; /* Light text */
+  transition: all 0.3s ease;
+}
+
+.stylish-input:focus {
+  border-color: var(--accent-color); /* Success color on focus */
+  box-shadow: 0 0 8px rgba(35, 209, 96, 0.5); /* Glow effect */
+  background-color: #333333;
+}
+
+.stylish-input:hover {
+  border-color: #48c774; /* Lighter green on hover */
+}
+
+.modify-cuota-form .field.is-grouped {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping to a new line */
+  gap: 1rem; /* Space between inputs */
+  align-items: flex-end; /* Align items vertically at the bottom */
+}
+
+.modify-cuota-form .field {
+  margin-bottom: 0; /* Remove default margin to save vertical space */
+  flex: 1; /* Allow fields to grow equally */
+}
+
+.modify-cuota-form .control {
+  flex: none; /* Prevent button from growing */
+}
+
+/* Ensure the box doesn't stretch too wide */
+.has-background-dark {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 100%; /* Adjust as needed */
+  padding: 1.5rem;
+}
+
+.has-text-info {
+  color: #48c774 !important;
+}

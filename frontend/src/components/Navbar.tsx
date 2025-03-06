@@ -23,8 +23,8 @@ interface NavbarProps {
 function Nabvar({
   items = [
     { label: "Alumnos", route: "/" },
-    { label: "Cuotas", route: "/cuotas" },
     { label: "Ejercicios", route: "/ejercicios" },
+    { label: "Cuotas", route: "/cuotas" },
     { label: "Datos", route: "/datos" },
   ],
   rightItems = [

@@ -14,7 +14,7 @@
 .select select:focus {
   border-color: var(--accent-color);
   outline: none;
-  box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-rgb), 0.25); /* Optional: Subtle focus ring */
+  box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-rgb), 0.25);
 }
 
 .select.is-accent::after {

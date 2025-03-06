@@ -6,7 +6,7 @@ from datetime import timedelta, date
 class Ejercicio(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.TextField()
-    # imagen = models.ImageField(upload_to="ejercicios/", null=True, blank=True)
+    imagen = models.ImageField(upload_to="ejercicios/", null=True, blank=True)
     
     def __str__(self):
         return self.nombre
@@ -15,10 +15,7 @@ class EjercicioAlumno(models.Model):
     ejercicio = models.ForeignKey(Ejercicio, on_delete=models.CASCADE)
     alumno = models.ForeignKey("Alumno", on_delete=models.CASCADE)
     fecha = models.DateField(auto_now_add=True)
-    series = models.IntegerField()
-    peso_repeticion_maxima = models.IntegerField(default=0)
-    repeticiones = models.IntegerField()
-    peso = models.FloatField()
+    peso_repeticion_maxima = models.FloatField()
     
     def __str__(self):
         return f"{self.ejercicio} - {self.alumno}"
@@ -38,10 +35,8 @@ class Cuota(models.Model):
 
     class Meta:
         unique_together = ('year', 'month') # Ensure only one cuota per month/year
-        pass
 
 class Alumno(models.Model):
-    
     def __str__(self):
         return str(self.nombre_apellido)
     
@@ -49,7 +44,6 @@ class Alumno(models.Model):
     cuotas = models.ManyToManyField(Cuota, through="CuotaAlumno")
     ejercicios = models.ManyToManyField(Ejercicio, through="EjercicioAlumno")
     
-    # foto = models.ImageField(upload_to="alumnos/", null=True, blank=True)
     nombre_apellido = models.CharField(max_length=100, blank=False)
     telefono = models.CharField(max_length=20)
     fecha_nacimiento = models.DateField(default=date.min)
@@ -64,28 +58,31 @@ class Alumno(models.Model):
     
     def monto_total_cuotas_pagadas(self):
         cuotas_pagadas = CuotaAlumno.objects.filter(alumno=self, pagada=True)
-        return sum([cuota.monto_final_cuota() for cuota in cuotas_pagadas])
+        return sum([cuota.monto_pagado or 0 for cuota in cuotas_pagadas])
     
 class CuotaAlumno(models.Model):
+    
+    def __str__(self):
+        return f"{self.alumno} - {self.cuota}"
     
     alumno = models.ForeignKey(Alumno, on_delete=models.CASCADE)
     cuota = models.ForeignKey(Cuota, on_delete=models.CASCADE)
     
     pagada = models.BooleanField(default=False)  
     descuento = models.IntegerField(default=0) #Cuanto se le aplica de descuento al monto de la cuota a ese alumno
-    plan = models.IntegerField(choices=[(2, "2 días"), (3, "3 días"), (4, "4 días"), (5, "5 días")])  # Add this field
+    plan = models.IntegerField(choices=[(2, "2 días"), (3, "3 días"), (4, "4 días"), (5, "5 días")])
     monto_pagado = models.IntegerField(null=True, blank=True)
+    
     fecha_pago = models.DateField(null=True, blank=True)
     fecha_vencimiento_cuota = models.DateField(null=True, blank=True)
     
     # Calcula el monto final pagado por el alumno
     def monto_final_cuota(self):
-        
         dias_monto = {
             2: self.cuota.monto_dos_dias,
             3: self.cuota.monto_tres_dias,
             4: self.cuota.monto_cuatro_dias,
-            5: self.cuota.monto
+            5: self.cuota.monto_cinco_dias
         }
         
         try:
@@ -101,9 +98,10 @@ class CuotaAlumno(models.Model):
         return self.fecha_pago + timedelta(days=30)
     
     def save(self, *args, **kwargs):
-        if self.pagada and self.fecha_pago: ## Si se pagó y hay fecha de pago calcula la fecha de vencimiento
-            self.fecha_vencimiento = self.calcular_fecha_vencimiento()
-        if self.monto_pagado is None: #Si no hay monto pagado se le asigna el monto final de la cuota
-            self.monto_pagado = self.monto_final_cuota()
+        if self.pagada and self.fecha_pago:
+            self.fecha_vencimiento_cuota = self.calcular_fecha_vencimiento()
+            # Ensure monto_pagado is set when marking as paid
+            if not self.monto_pagado:
+                self.monto_pagado = self.monto_final_cuota()
         super().save(*args, **kwargs)
-        
+

@@ -22,19 +22,21 @@ class AlumnoSerializer(serializers.ModelSerializer):
 class CuotaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cuota
-        fields = ["month", "year", "monto_dos_dias", "monto_tres_dias", "monto_cuatro_dias", "monto_cinco_dias"]
+        fields = ["id","month", "year", "monto_dos_dias", "monto_tres_dias", "monto_cuatro_dias", "monto_cinco_dias"]
 
 class CuotaAlumnoSerializer(serializers.ModelSerializer):
+    # alumno = AlumnoSerializer(read_only=True)
+    # cuota = CuotaSerializer(read_only=True)
     class Meta:
         model = CuotaAlumno
-        fields = ["alumno", "cuota", "pagada", "descuento","monto_pagado", "plan", "fecha_pago", "fecha_vencimiento_cuota"]
+        fields = ["id", "alumno", "cuota", "pagada", "descuento", "monto_pagado", "plan", "fecha_pago", "fecha_vencimiento_cuota"]
         
 class EjercicioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ejercicio
-        fields = ["nombre", "descripcion", "imagen"]
+        fields = ["id","nombre", "descripcion", "imagen"]
 
 class EjercicioAlumnoSerializer(serializers.ModelSerializer):
     class Meta:
         model = EjercicioAlumno
-        fields = ["alumno", "ejercicio", "fecha", "series", "repeticiones", "peso"]
+        fields = ["id","alumno", "ejercicio", "fecha", "peso_repeticion_maxima"]

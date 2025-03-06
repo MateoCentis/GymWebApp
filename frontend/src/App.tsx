@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/HomePage";
 import Cuotas from "./pages/CuotasPage";
-import Datos from "./pages/Datos";
+import Datos from "./pages/DatosPage";
 import Ejercicios from "./pages/Ejercicios";
 import NotFound from "./pages/NotFound";
 // Importe de componentes
@@ -38,9 +38,11 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* Register y login */}
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
+        {/* Navbar */}
         <Route path="/cuotas" element={<Cuotas />} />
         <Route path="/datos" element={<Datos />} />
         <Route path="/ejercicios" element={<Ejercicios />} />

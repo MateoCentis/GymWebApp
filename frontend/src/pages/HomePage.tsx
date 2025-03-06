@@ -39,7 +39,7 @@ function Home() {
       render: (item: AlumnoType) => (item.activo ? "Sí" : "No"),
     }, // TODO: agregar un check donde se quiera mostrar o no el activo
     {
-      title: "Acciones", // Added actions column
+      title: "Acciones",
       key: "actions",
       render: (item: AlumnoType) => (
         <div className="d-flex align-items-center">
@@ -250,7 +250,7 @@ function Home() {
     <div>
       <Nabvar />
       <div className="title-container">
-        <h1 className="title is-family-sans-serif">Alumnos</h1>
+        <h1 className="title big-title is-family-sans-serif">Alumnos</h1>
       </div>
       <div className="search-bar-container">
         <div className="search-bar-wrapper">

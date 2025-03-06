@@ -9,6 +9,7 @@ urlpatterns = [
 
     path("cuotas/", views.CuotaListView.as_view(), name="cuota-list"),
     path("cuotas/<int:pk>/", views.CuotaView.as_view(), name="cuota-detail"),
+    path("cuotas/<int:cuota_id>/unpaid-students/", views.get_unpaid_students, name="unpaid-students"),
 
     path("cuotasalumno/", views.CuotaAlumnoListView.as_view(), name="cuotaalumno-list"),
     path("cuotasalumno/<int:pk>/", views.CuotaAlumnoView.as_view(), name="cuotaalumno-detail"),

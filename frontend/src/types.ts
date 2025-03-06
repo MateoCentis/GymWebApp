@@ -12,7 +12,7 @@ export interface AlumnoType {
   cuotas: number[];
 }
 
-interface CuotaType {
+export interface CuotaType {
   id: number;
   month: number;
   year: number;
@@ -22,10 +22,10 @@ interface CuotaType {
   monto_cinco_dias: number;
 }
 
-interface CuotaAlumnoType {
+export interface CuotaAlumnoType {
   id: number;
-  alumno: number; // ID of the alumno
-  cuota: number; // ID of the cuota
+  alumno: number;
+  cuota: number;
   pagada: boolean;
   descuento: number;
   plan: 2 | 3 | 4 | 5;
@@ -34,6 +34,17 @@ interface CuotaAlumnoType {
   fecha_vencimiento_cuota: string | null;
 }
 
-interface EjercicioType {}
+export interface EjercicioType {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  imagen: string | null;
+}
 
-interface EjercicioAlumnoType {}
+export interface EjercicioAlumnoType {
+  id: number;
+  alumno: number;
+  ejercicio: number;
+  fecha: string;
+  peso_repeticion_maxima: number;
+}
