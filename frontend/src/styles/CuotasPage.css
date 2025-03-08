@@ -1,7 +1,25 @@
+:root {
+  --primary-color: #48c774;
+  --success-color: #48c774;
+  --danger-color: #f14668;
+  --warning-color: #ffdd57;
+  --info-color: #3298dc;
+  --background-color: #f5f5f5;
+  --text-color: #363636;
+  --text-light-color: #7a7a7a;
+  --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --accent-color: #485fc7;
+  --font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    "Helvetica", "Arial", sans-serif;
+}
+
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
 }
 
 .selects-container {
@@ -16,22 +34,44 @@ body {
   margin-top: 30px;
 }
 
+/* Year select container - centered label */
+.year-select-container {
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+.year-select-container .field {
+  text-align: center;
+}
+
+.year-select-container .label {
+  text-align: center;
+  display: block;
+  color: var(--text-color);
+}
+
 /* Cards de meses */
 /* Grilla para los meses */
 .months-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr); /* 12 equal columns */
-  gap: 8px;
+  gap: 12px;
   justify-content: center;
   max-width: 100%;
-  padding: 10px;
+  padding: 15px 10px;
   overflow-x: auto; /* Allow horizontal scrolling on smaller screens */
+  margin: 20px auto;
 }
 
 /* Month card styling */
 .month-card {
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease;
+}
+
+.month-card:hover .card {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Card design */
@@ -44,8 +84,17 @@ body {
   font-size: 1rem;
   font-weight: 600;
   border-radius: 8px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-  transition: 0.2s ease-in-out;
+  box-shadow: var(--box-shadow);
+  transition: all 0.2s ease-in-out;
+  padding: 0.75rem 0;
+}
+
+.card-content {
+  padding: 0.5rem;
+}
+
+.month-name {
+  margin: 0;
 }
 
 /* Selected month styling (fixing border-only issue) */
@@ -53,6 +102,214 @@ body {
   background-color: var(--accent-color) !important;
   color: white;
   border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  font-weight: 700;
+}
+
+/* Cuota modify box styling */
+.cuota-modify-box {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.cuota-modify-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-family);
+  color: var(--text-color) !important;
+}
+
+.cuota-inputs-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.cuota-input {
+  flex: 1;
+  min-width: 150px;
+  max-width: 250px;
+}
+
+.cuota-input .label {
+  text-align: center;
+  display: block;
+  color: var(--text-color);
+  margin-bottom: 0.5em;
+}
+
+.cuota-input input:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.125em rgba(72, 199, 116, 0.25) !important;
+}
+
+.save-button-container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.cuota-warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* Resumen section styling - updated for dark theme */
+.resumen-box {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.resumen-title {
+  color: white;
+  margin-bottom: 1.5rem !important;
+  font-family: var(--font-family);
+}
+
+.resumen-cards {
+  margin-top: 1.5rem;
+}
+
+.resumen-card {
+  display: flex;
+  align-items: center;
+  background-color: #2a2a2a; /* Darker background for cards */
+  border-radius: 8px;
+  padding: 1.5rem;
+  height: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.resumen-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+}
+
+.total-alumnos {
+  border-left: 5px solid var(--info-color);
+}
+
+.alumnos-pagaron {
+  border-left: 5px solid var(--success-color);
+}
+
+.ingresos-mes {
+  border-left: 5px solid var(--accent-color);
+}
+
+.resumen-icon {
+  font-size: 2.5rem;
+  padding-right: 1.5rem;
+  color: #b0b0b0; /* Light gray icon color */
+  opacity: 0.8;
+}
+
+.resumen-content {
+  flex: 1;
+}
+
+.resumen-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: white; /* White text for value */
+}
+
+.resumen-label {
+  font-size: 1rem;
+  color: #b0b0b0; /* Light gray text for label */
+}
+
+/* Table section */
+.table-box {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+}
+
+/* Table improvements */
+.table-container {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+/* Ensure tables don't overflow on mobile */
+.table {
+  width: 100%;
+}
+
+/* Center estado column */
+td[data-key="pagada"],
+th[data-key="pagada"] {
+  text-align: center !important;
+}
+
+/* Status tag styling */
+.tag.is-success {
+  background-color: var(--success-color);
+  color: white;
+  padding: 0.5em 0.75em;
+  font-size: 0.85em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.tag.is-danger {
+  background-color: var(--danger-color);
+  color: white;
+  padding: 0.5em 0.75em;
+  font-size: 0.85em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+/* Action buttons */
+.buttons.is-centered {
+  justify-content: center;
+  margin-bottom: 0;
+}
+
+/* Input fields in table */
+.table input.input.is-small {
+  height: 2.25em;
+  max-width: 100px;
+  border-color: #dbdbdb;
+}
+
+.table input.input.is-small:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.125em rgba(72, 199, 116, 0.25);
+}
+
+/* Select dropdown in table */
+.table .select.is-small {
+  height: 2.25em;
+}
+
+.table .select.is-small select {
+  border-color: #dbdbdb;
+}
+
+.table .select.is-small select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.125em rgba(72, 199, 116, 0.25);
 }
 
 /* Mobile adjustments */
@@ -60,14 +317,39 @@ body {
   .months-grid {
     grid-template-columns: repeat(
       12,
-      minmax(50px, 1fr)
+      minmax(60px, 1fr)
     ); /* Keep all 12 months in one row */
     overflow-x: auto; /* Enable horizontal scrolling */
     white-space: nowrap;
   }
 
   .card {
-    font-size: 0.5rem; /* Smaller text for mobile */
+    font-size: 0.75rem; /* Smaller text for mobile */
     width: 60px; /* Adjust card width */
+  }
+
+  .selects-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cuota-inputs-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cuota-input {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .resumen-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .resumen-icon {
+    padding-right: 0;
+    padding-bottom: 0.75rem;
   }
 }

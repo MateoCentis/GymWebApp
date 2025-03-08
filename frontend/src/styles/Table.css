@@ -1,8 +1,8 @@
 .table {
   border-collapse: collapse;
   width: 100%;
-  table-layout: auto;
-  flex-grow: 1;
+  table-layout: auto; /* Change from fixed to auto to allow varying column widths */
+  margin-bottom: 0 !important; /* Override Bulma's default margin */
 }
 
 body,
@@ -13,35 +13,86 @@ html,
   margin: 0; /* Remove default margins */
 }
 
+/* Improve table container to ensure scrolling works properly */
 .table-container {
   padding-bottom: 20px;
-}
-.table-div {
-  margin-top: 10px;
-  width: 95%;
-  margin-left: auto;
-  margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  flex-grow: 1;
-  /* max-height: 50vh; */
-  /* height: 50vh; */
+  max-height: 60vh; /* Use viewport height for better responsiveness */
+  overflow-y: auto !important; /* Force vertical scrolling */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+  position: relative; /* Required for sticky headers */
+  display: block; /* Ensure it takes full width */
+  width: 100%;
+  border: none !important; /* Remove the frame */
+  border-radius: 0;
+  margin-bottom: 1.5rem;
 }
 
+/* Table wrapper adjustments */
+.table-div {
+  margin-top: 10px;
+  width: 100%; /* Full width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Make headers truly sticky */
+.table thead th {
+  position: sticky !important;
+  top: 0;
+  z-index: 10;
+  background-color: var(--background-color);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove sticky footer - make it scroll with the content */
+.table tfoot th {
+  position: relative !important; /* Changed from sticky to relative */
+  background-color: var(--background-color);
+  border-top: 1px solid rgba(var(--accent-color-rgb), 0.2);
+}
+
+/* Cell styling - keep borders on cells but not container */
 .table td,
-table th {
+.table th {
+  padding: 0.75rem;
+  vertical-align: middle;
+  border: 1px solid rgba(var(--accent-color-rgb), 0.1);
   word-wrap: break-word !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
-  position: sticky !important;
 }
 
-.table-body-scroll {
-  overflow-y: auto;
-  max-height: 30vh;
-  table-layout: fixed;
+/* Column width adjustments */
+.table th {
+  width: auto; /* Allow columns to size based on content */
+}
+
+/* Special width handling for specific columns */
+.table th:has([data-column="actions"]) {
+  width: 180px !important; /* Fixed width for action buttons column */
+}
+
+/* Customize scrollbars for better visual appearance */
+.table-container::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: rgba(var(--accent-color-rgb), 0.1);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 4px;
+}
+
+/* Firefox scrollbar styling */
+.table-container {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) rgba(var(--accent-color-rgb), 0.1);
 }
 
 .table-header-sortable {
@@ -49,13 +100,32 @@ table th {
 }
 
 .table-header-hover {
-  background-color: var(--accent-color) !important; /* Use !important */
+  background-color: var(--accent-color) !important;
   transition: background-color 0.3s ease;
+  color: white;
 }
 
-/* Estilos Scrollbar */
-/* WebKit browsers (Chrome, Safari) */
-.table-div {
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent-color) var(--background-color);
+/* Action button styling */
+.action-buttons-container {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons.is-centered {
+  justify-content: center !important;
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .table-container {
+    max-height: 50vh; /* Lower height on mobile for better usability */
+  }
+
+  .table {
+    font-size: 0.9rem; /* Slightly smaller font on mobile */
+  }
 }

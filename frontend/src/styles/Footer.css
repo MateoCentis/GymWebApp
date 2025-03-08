@@ -1,0 +1,41 @@
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+}
+
+/* Push footer to bottom */
+#root > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* Footer styling */
+.app-footer {
+  width: 100%;
+  /* background-color: var(--background-color); */
+  border-top: 1px solid rgba(var(--accent-color-rgb), 0.2);
+  padding: 10px 0;
+  margin-top: auto; /* Push to bottom */
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-content p {
+  margin: 0;
+}
+
+.footer-content a {
+  color: var(--accent-color);
+  font-weight: bold;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-content a:hover {
+  color: var(--primary-hover);
+}

@@ -6,7 +6,12 @@ interface TableColumn {
   key: string;
   render?: (item: any) => React.ReactNode;
   sortable?: boolean;
-  headerProps?: React.HTMLAttributes<HTMLTableCellElement>;
+  headerProps?: React.HTMLAttributes<HTMLTableCellElement> & {
+    [key: `data-${string}`]: string | number | boolean;
+  };
+  cellProps?: React.HTMLAttributes<HTMLTableCellElement> & {
+    [key: `data-${string}`]: string | number | boolean;
+  };
 }
 
 interface TableItem {
@@ -78,7 +83,9 @@ function Table({ columns, items, className }: TableProps) {
               {columns.map((column) => (
                 <td
                   key={column.key}
+                  {...column.cellProps}
                   style={{
+                    ...(column.cellProps?.style || {}),
                     textAlign:
                       column.key === "actions"
                         ? "center"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { EjercicioAlumnoType, EjercicioType, AlumnoType } from "../types";
 import Select from "./Select";
+import "../styles/EjercicioModal.css";
 
 interface EjercicioAlumnoModalProps {
   isOpen: boolean;
@@ -103,7 +104,7 @@ const EjercicioAlumnoModal: React.FC<EjercicioAlumnoModalProps> = ({
         </header>
         <section className="modal-card-body">
           <form onSubmit={handleSubmit}>
-            <div className="field">
+            <div className="field ejercicio-alumno-select">
               <label className="label">Alumno</label>
               <div className="control">
                 <Select
@@ -116,7 +117,7 @@ const EjercicioAlumnoModal: React.FC<EjercicioAlumnoModalProps> = ({
               </div>
             </div>
 
-            <div className="field">
+            <div className="field ejercicio-alumno-select">
               <label className="label">Ejercicio</label>
               <div className="control">
                 <Select
@@ -146,15 +147,18 @@ const EjercicioAlumnoModal: React.FC<EjercicioAlumnoModalProps> = ({
               </div>
             </div>
 
-            <div className="field is-grouped">
-              <div className="control">
+            <div className="field">
+              <div className="control has-text-centered">
                 <button className="button is-primary" type="submit">
                   {ejercicioAlumnoToEdit
                     ? "Guardar Cambios"
                     : "Registrar Ejercicio"}
                 </button>
               </div>
-              <div className="control">
+            </div>
+
+            <div className="field">
+              <div className="control has-text-centered">
                 <button
                   className="button is-light"
                   type="button"

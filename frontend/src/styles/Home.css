@@ -1,0 +1,9 @@
+/* Home page styles */
+
+/* Keep only the essential styles */
+section.section {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Remove any search-bar-container styles from here as they're in SearchBar.css */

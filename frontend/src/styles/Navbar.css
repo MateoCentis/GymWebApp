@@ -1,6 +1,7 @@
 .navbar {
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(var(--accent-color-rgb), 0.2);
 }
 
 /* Estilos del logo */
@@ -128,4 +129,45 @@
     height: 100%; /* Full height of the item */
     margin: 0; /* Remove horizontal margins */
   }
+}
+
+.navbar-item.logout-button:hover {
+  background-color: transparent !important;
+  color: var(--accent-color) !important;
+}
+
+/* Fix for logout button hover */
+.navbar-end .button.is-light.is-danger:hover {
+  background-color: transparent !important;
+  color: var(--accent-color) !important;
+  box-shadow: none !important;
+}
+
+.button.navbar-end-button:hover {
+  background-color: transparent !important;
+  color: var(--accent-color) !important;
+}
+
+/* Ensure the navbar container doesn't add hover backgrounds */
+.navbar-end .navbar-item:hover {
+  background-color: transparent !important;
+}
+
+/* More specific selector to override Bulma's default hover behavior */
+.navbar
+  .navbar-menu
+  .navbar-end
+  .navbar-item
+  .buttons
+  .button.is-light.is-danger {
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar
+  .navbar-menu
+  .navbar-end
+  .navbar-item
+  .buttons
+  .button.is-light.is-danger:hover {
+  background-color: transparent !important;
 }

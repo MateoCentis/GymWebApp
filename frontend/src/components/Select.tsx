@@ -7,6 +7,7 @@ interface SelectProps {
   label: string;
   placeholder?: string;
   className?: string;
+  includeDefaultOption?: boolean;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -16,6 +17,7 @@ const Select: React.FC<SelectProps> = ({
   label,
   placeholder = "Seleccione una opción",
   className,
+  includeDefaultOption = true,
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = parseInt(event.target.value, 10);
@@ -24,8 +26,10 @@ const Select: React.FC<SelectProps> = ({
     }
   };
 
-  // Ensure we have at least one option
-  const allOptions = [{ value: -1, label: placeholder }, ...options];
+  // Prepare options based on whether to include default placeholder option
+  const allOptions = includeDefaultOption
+    ? [{ value: -1, label: placeholder }, ...options]
+    : options;
 
   return (
     <div className="field">
@@ -40,7 +44,7 @@ const Select: React.FC<SelectProps> = ({
               <option
                 key={option.value}
                 value={option.value}
-                disabled={option.value === -1}
+                disabled={includeDefaultOption && option.value === -1} // Only disable if it's the default placeholder option
               >
                 {option.label}
               </option>

@@ -1,0 +1,181 @@
+/* DatosPage Styling */
+
+.datos-container {
+  padding: 0 1.5rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header styling with greeting and date/time */
+.stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.greeting {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+.date-time {
+  font-size: 1rem;
+  color: #b0b0b0;
+}
+
+/* Remove year selector container as it's no longer needed */
+.year-selector-container {
+  display: none;
+}
+
+/* Charts grid layout */
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+/* Card styling for each chart */
+.chart-card {
+  background-color: #1e1e1e; /* Darker background for cards */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chart-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Chart header with filter - improved layout */
+.chart-header {
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px; /* Add gap between title and filter */
+}
+
+.chart-title {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  flex: 1; /* Allow title to take available space */
+}
+
+/* Chart filter styling - make more consistent across all charts */
+.chart-filter {
+  min-width: 180px; /* Ensure minimum width */
+  width: auto; /* Allow to grow if needed */
+}
+
+.chart-filter .select {
+  height: auto; /* Let the select define its own height */
+}
+
+/* Standardize select appearance across all charts */
+.chart-filter .select.chart-select select {
+  height: 36px; /* Increased height for better usability */
+  padding: 4px 10px; /* More generous padding */
+  font-size: 0.9rem; /* Slightly larger text */
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  width: 100%; /* Ensure full width */
+}
+
+/* Dark theme styling for chart selects - improved for better color coherence */
+.chart-filter .select.chart-select select {
+  height: 36px; /* Increased height for better usability */
+  padding: 4px 10px; /* More generous padding */
+  font-size: 0.9rem; /* Slightly larger text */
+  background-color: #1e1e1e; /* Dark background to match app theme */
+  color: #e0e0e0; /* Light text color */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  width: 100%; /* Ensure full width */
+}
+
+.chart-filter .select.chart-select select:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.chart-filter .select.chart-select select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.125em rgba(72, 95, 199, 0.25);
+}
+
+/* Styling for dropdown options to match theme */
+.chart-filter .select.chart-select select option {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+/* Selected option in dropdown */
+.chart-filter .select.chart-select select option:checked,
+.chart-filter .select.chart-select select option:hover,
+.chart-filter .select.chart-select select option:focus {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+/* Chart body */
+.chart-body {
+  padding: 1.5rem;
+  height: 350px;
+  position: relative;
+}
+
+/* Make the large charts full width */
+.chart-card:nth-child(1),
+.chart-card:nth-child(2) {
+  grid-column: span 2;
+}
+
+/* Ensure proper spacing in chart headers */
+.chart-card:nth-child(4) .chart-header {
+  flex-wrap: wrap; /* Allow wrapping for the exercise statistics chart */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card:nth-child(1),
+  .chart-card:nth-child(2) {
+    grid-column: span 1;
+  }
+
+  .stats-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .chart-body {
+    height: 300px;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .chart-filter {
+    width: 100%; /* Full width on mobile */
+  }
+}

@@ -1,0 +1,279 @@
+/* Update colors for dark theme */
+.alumno-info-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.back-button-container {
+  margin-bottom: 20px;
+}
+
+.alumno-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.alumno-header .title {
+  margin-bottom: 0;
+  margin-right: 15px;
+}
+
+.status-tag {
+  font-size: 0.9rem;
+  padding: 5px 10px;
+}
+
+/* Update card styling to match dark theme */
+.alumno-details-card {
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Force exactly two columns */
+  gap: 15px;
+  width: 100%;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Allow content to shrink when needed */
+}
+
+.detail-label {
+  font-weight: bold;
+  color: var(--accent-color);
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+}
+
+/* Tab styling to match dark theme */
+.tabs-container {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.tabs.is-boxed li.is-active a {
+  border-color: var(--accent-color);
+  border-bottom-color: transparent !important;
+  color: var(--text-color);
+}
+
+.tabs.is-boxed a {
+  color: var(--text-color);
+}
+
+.tab-content {
+  /* background-color: var(--primary-color); */
+  border-radius: 0 0 8px 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  width: 100%; /* Ensure tab content takes full width */
+  overflow-x: hidden; /* Prevent horizontal overflow */
+  position: relative; /* Create positioning context */
+  min-height: 500px; /* Increased from 400px to accommodate chart */
+  overflow: hidden; /* Prevent content overflow */
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.ejercicios-records {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* Update the ejercicio-record-card styling for better visibility */
+.ejercicio-record-card {
+  display: flex;
+  background-color: #2a2a2a; /* Darker background for cards */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-left: 4px solid var(--accent-color); /* Add accent color border */
+  margin-bottom: 15px;
+}
+
+.ejercicio-image-container {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1a1a1a; /* Even darker for image container */
+}
+
+.ejercicio-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-image-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-color: #1a1a1a;
+  color: #555;
+  font-size: 2rem;
+}
+
+.ejercicio-info {
+  flex: 1;
+  padding: 15px;
+}
+
+/* Update ejercicio info text colors for better visibility */
+.ejercicio-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: #ffffff; /* Light text for dark background */
+}
+
+.ejercicio-date,
+.ejercicio-weight,
+.ejercicio-strength {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  color: #b0b0b0; /* Light gray for secondary text */
+  font-size: 0.9rem;
+}
+
+.ejercicio-date .icon,
+.ejercicio-weight .icon,
+.ejercicio-strength .icon {
+  margin-right: 8px;
+  color: var(--accent-color);
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Style the back button to match theme colors */
+.button.is-info.is-outlined {
+  background-color: transparent;
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.button.is-info.is-outlined:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+  .details-grid {
+    grid-template-columns: 1fr; /* Single column on mobile */
+  }
+}
+
+/* Tab styling for consistent layout */
+.tabs {
+  margin-bottom: 0 !important;
+  width: 100%;
+}
+
+.tabs-container {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.tab-content {
+  border-radius: 0 0 8px 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  min-height: 500px; /* Increased from 400px to accommodate chart */
+  overflow: hidden; /* Prevent content overflow */
+  position: relative;
+}
+
+/* Ensure tab contents have consistent width */
+.tab-content .table-container,
+.tab-content .ejercicios-records {
+  width: 100%;
+}
+
+/* Consistent width for both table and grid layouts */
+.ejercicios-records {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+/* Animation that won't affect layout */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Exercise select container - improved spacing */
+.exercise-filter-container {
+  margin-bottom: 25px;
+  margin-top: 10px;
+  max-width: 300px;
+  border-bottom: 2px solid var(--accent-color);
+  padding-bottom: 10px;
+}
+
+/* Add spacing for the subtitle */
+.tab-content-inner .subtitle {
+  margin-bottom: 20px;
+}
+
+/* Progress Chart styling */
+.progress-chart-container {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.progress-chart-title {
+  color: white;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.progress-chart {
+  height: 300px;
+  position: relative;
+}

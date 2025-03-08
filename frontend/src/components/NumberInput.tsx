@@ -7,6 +7,9 @@ interface NumberInputProps {
   onChange: (value: number) => void;
   min?: number;
   max?: number;
+  step?: number;
+  placeholder?: string;
+  className?: string;
 }
 
 const NumberInput: React.FC<NumberInputProps> = ({
@@ -15,22 +18,30 @@ const NumberInput: React.FC<NumberInputProps> = ({
   onChange,
   min = 0,
   max,
+  step = 1,
+  placeholder = "0",
+  className = "",
 }) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value === "" ? 0 : parseInt(e.target.value, 10);
+    if (!isNaN(newValue)) {
+      onChange(newValue);
+    }
+  };
+
   return (
-    <div className="field">
-      <label className="label has-text-light has-text-weight-semibold">
-        {label}
-      </label>
+    <div className={`field ${className}`}>
+      <label className="label has-text-centered">{label}</label>
       <div className="control">
         <input
-          className="input is-rounded is-medium stylish-input"
+          className="input cuota-input-field"
           type="number"
-          value={value}
-          onChange={(e) => onChange(parseInt(e.target.value) || 0)}
           min={min}
           max={max}
-          step="1"
-          style={{ width: "300px" }}
+          step={step}
+          value={value || ""}
+          placeholder={placeholder}
+          onChange={handleChange}
         />
       </div>
     </div>

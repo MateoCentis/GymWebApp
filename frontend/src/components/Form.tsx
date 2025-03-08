@@ -77,7 +77,7 @@ function Form({ route, method }: Props) {
 
           <div className="control">
             <button
-              className="button is-link is-primary is-fullwidth"
+              className="button is-link is-fullwidth"
               type="submit"
               disabled={loading}
               style={{ marginBottom: "5px" }}

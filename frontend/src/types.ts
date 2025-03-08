@@ -48,3 +48,29 @@ export interface EjercicioAlumnoType {
   fecha: string;
   peso_repeticion_maxima: number;
 }
+
+// Types for DatosPage
+export interface MonthlyData {
+  month: number;
+  year: number;
+  totalIncome: number;
+  paidPercentage: number;
+  totalStudents: number;
+  studentsWhoHavePaid: number;
+}
+
+export interface PlanData {
+  plan: number;
+  count: number;
+}
+
+export interface ExerciseData {
+  exerciseName: string;
+  count: number;
+  averageWeight: number;
+}
+
+export interface MonthlyPlanData {
+  month: number;
+  planDistribution: PlanData[];
+}

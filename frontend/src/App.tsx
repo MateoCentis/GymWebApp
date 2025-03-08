@@ -5,8 +5,9 @@ import Register from "./pages/Register";
 import Home from "./pages/HomePage";
 import Cuotas from "./pages/CuotasPage";
 import Datos from "./pages/DatosPage";
-import Ejercicios from "./pages/Ejercicios";
+import EjerciciosPage from "./pages/EjerciciosPage";
 import NotFound from "./pages/NotFound";
+import AlumnoInfoPage from "./pages/AlumnoInfoPage";
 // Importe de componentes
 import ProtectedRoute from "./components/ProtectedRoute";
 // Importe de estilos (importa el orden)
@@ -45,7 +46,8 @@ function App() {
         {/* Navbar */}
         <Route path="/cuotas" element={<Cuotas />} />
         <Route path="/datos" element={<Datos />} />
-        <Route path="/ejercicios" element={<Ejercicios />} />
+        <Route path="/ejercicios" element={<EjerciciosPage />} />
+        <Route path="/alumno/:id" element={<AlumnoInfoPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

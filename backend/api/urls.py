@@ -6,6 +6,7 @@ urlpatterns = [
 
     path("alumnos/", views.AlumnoListView.as_view(), name="alumno-list"),
     path("alumnos/<int:pk>/", views.AlumnoView.as_view(), name="alumno-detail"),
+    path("alumnos/<int:alumno_id>/detail/", views.alumno_detail, name="alumno-comprehensive-detail"),
 
     path("cuotas/", views.CuotaListView.as_view(), name="cuota-list"),
     path("cuotas/<int:pk>/", views.CuotaView.as_view(), name="cuota-detail"),
@@ -19,4 +20,11 @@ urlpatterns = [
 
     path("ejercicioalumno/", views.EjercicioAlumnoListView.as_view(), name="ejercicioalumno-list"),
     path("ejercicioalumno/<int:pk>/", views.EjercicioAlumnoView.as_view(), name="ejercicioalumno-detail"),
+    
+    # Add new endpoints for statistics
+    path("stats/available-years/", views.get_available_years, name="stats-available-years"),
+    path("stats/monthly-income/", views.get_monthly_income, name="stats-monthly-income"),
+    path("stats/plan-distribution/", views.get_plan_distribution, name="stats-plan-distribution"),
+    path("stats/exercise-stats/", views.get_exercise_stats, name="stats-exercise-stats"),
+    path("stats/student-progression/", views.get_student_progression, name="stats-student-progression"),
 ]

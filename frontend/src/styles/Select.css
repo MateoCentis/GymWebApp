@@ -11,12 +11,49 @@
   margin-left: 0.1rem;
 }
 
+/* Strengthen focus styles to override browser defaults */
 .select select:focus {
-  border-color: var(--accent-color);
-  outline: none;
-  box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-rgb), 0.25);
+  border-color: var(--accent-color) !important;
+  outline-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-rgb), 0.25) !important;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(var(--accent-color-rgb), 0.25) !important;
 }
 
 .select.is-accent::after {
-  border-color: rgba(var(--accent-color-rgb)) !important;
+  border-color: var(--accent-color) !important;
+}
+
+.select select option:checked {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  box-shadow: 0 0 10px 100px var(--accent-color) inset !important;
+  -webkit-box-shadow: 0 0 10px 100px var(--accent-color) inset !important;
+}
+
+/* Override select dropdown appearance when active/focused */
+.select select:active,
+.select select:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 0.125em rgba(var(--accent-color-rgb), 0.25) !important;
+}
+
+/* Ensure the dropdown arrow has the accent color */
+.select:not(.is-multiple):not(.is-loading)::after {
+  border-color: var(--accent-color) !important;
+}
+
+/* Override browser default focus ring */
+.select select::-moz-focus-inner {
+  border-color: var(--accent-color) !important;
+}
+
+/* Override Chrome's blue outline */
+.select select:focus-visible {
+  outline-color: var(--accent-color) !important;
+}
+
+/* Add specific styling for the ejercicio filter select */
+.ejercicio-filter-wrapper .select select:focus {
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 0.125em rgba(var(--accent-color-rgb), 0.25) !important;
 }

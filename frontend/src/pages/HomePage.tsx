@@ -1,29 +1,40 @@
 import { useState, useEffect } from "react";
 import api from "../api";
-//Componentes
+import { useNavigate } from "react-router-dom";
+// Componentes
 import Nabvar from "../components/Navbar";
 import Table from "../components/Table";
 import SearchBar from "../components/SearchBar";
 import AlumnoModal from "../components/AlumnoModal";
-//Tipos
+import Loading from "../components/Loading";
+// Tipos
 import { AlumnoType } from "../types";
-//Estilos
+// Estilos
 import "../styles/SearchBar.css";
 import "../styles/Title.css";
 import "../styles/Table.css";
 import Footer from "../components/Footer";
+import "../styles/Home.css";
 
 function Home() {
   const [alumnos, setAlumnos] = useState<AlumnoType[]>([]); //Data de la tabla
   const [isModalOpen, setIsModalOpen] = useState(false); // Para crear alumnos
   const [alumnoToEdit, setAlumnoToEdit] = useState<AlumnoType | null>(null); // Para editar un alumno
   const [isCreating, setIsCreating] = useState(false);
+  const [loading, setLoading] = useState(false);
   // Tabla
   const [sortKey, setSortKey] = useState<keyof AlumnoType | null>(null); // State for sorting
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   // Barra
   const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
+
+  // Function to navigate to the alumno info page
+  const navigateToAlumnoInfo = (alumnoId: number) => {
+    navigate(`/alumno/${alumnoId}`);
+  };
 
   // Tabla
   const tableColumns = [
@@ -42,25 +53,36 @@ function Home() {
       title: "Acciones",
       key: "actions",
       render: (item: AlumnoType) => (
-        <div className="d-flex align-items-center">
-          <button
-            className="button is-small is-primary mr-2" // Added edit button
-            // onClick={() => openEditModal(item)}
-          >
-            Info
-          </button>
-          <button
-            className="button is-small is-info mr-2" // Added edit button
-            onClick={() => openEditModal(item)}
-          >
-            Editar
-          </button>
-          <button
-            className="button is-small is-danger"
-            onClick={() => deleteAlumno(item.id)}
-          >
-            Eliminar
-          </button>
+        <div style={{ textAlign: "center", width: "100%" }}>
+          <div className="buttons is-centered">
+            <button
+              className="button is-small is-primary mr-2"
+              onClick={() => navigateToAlumnoInfo(item.id)}
+            >
+              <span className="icon">
+                <i className="fas fa-info-circle"></i>
+              </span>
+              <span>Info</span>
+            </button>
+            <button
+              className="button is-small is-info mr-2"
+              onClick={() => openEditModal(item)}
+            >
+              <span className="icon">
+                <i className="fas fa-edit"></i>
+              </span>
+              <span>Editar</span>
+            </button>
+            <button
+              className="button is-small is-danger"
+              onClick={() => deleteAlumno(item.id)}
+            >
+              <span className="icon">
+                <i className="fas fa-trash"></i>
+              </span>
+              <span>Eliminar</span>
+            </button>
+          </div>
         </div>
       ),
       sortable: false,
@@ -77,6 +99,7 @@ function Home() {
   // Traer alumnos
   const getAlumnos = async () => {
     try {
+      setLoading(true);
       const res = await api.get("/api/alumnos/");
       const data = res.data as AlumnoType[];
       const alumnosWithAgeCalculated = data.map((alumno) => ({
@@ -86,6 +109,8 @@ function Home() {
       setAlumnos(alumnosWithAgeCalculated);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,6 +123,7 @@ function Home() {
     if (!alumnoToEdit) return; // Solo si hay un alumno para editar
 
     try {
+      setLoading(true);
       const res = await api.put(
         `/api/alumnos/${alumnoToEdit.id}/`, // Use PUT for updates
         editedAlumnoData
@@ -111,12 +137,15 @@ function Home() {
       }
     } catch (error) {
       alert(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   // Eliminar alumno
   const deleteAlumno = (idAlumno: number) => {
     const encodedId = encodeURIComponent(idAlumno.toString());
+    setLoading(true);
     api
       .delete(`/api/alumnos/${encodedId}/`)
       .then((res) => {
@@ -127,7 +156,8 @@ function Home() {
           alert("Fallo al eliminar alumno");
         }
       })
-      .catch((error) => alert(error));
+      .catch((error) => alert(error))
+      .finally(() => setLoading(false));
   };
 
   // Modal para abrir
@@ -158,6 +188,7 @@ function Home() {
     >
   ) => {
     try {
+      setLoading(true);
       const res = await api.post("/api/alumnos/", newAlumnoData);
       if (res.status === 201) {
         alert("Alumno creado");
@@ -169,6 +200,8 @@ function Home() {
       }
     } catch (error) {
       alert(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -252,29 +285,36 @@ function Home() {
       <div className="title-container">
         <h1 className="title big-title is-family-sans-serif">Alumnos</h1>
       </div>
-      <div className="search-bar-container">
-        <div className="search-bar-wrapper">
-          <SearchBar
-            onSearch={handleSearch}
-            placeholder="Buscar alumnos"
-            leftIcon="search"
-            rightIcon="user-circle"
+
+      <section className="section">
+        <div className="search-bar-container">
+          <div className="search-bar-wrapper">
+            <SearchBar
+              onSearch={handleSearch}
+              placeholder="Buscar alumnos"
+              leftIcon="search"
+              rightIcon="user-circle"
+            />
+          </div>
+          <button
+            className="button ml-3 is-responsive is-outlined color-boton-searchbar"
+            onClick={openModal}
+          >
+            <span className="icon">
+              <i className="fas fa-plus"></i>
+            </span>
+            <span>Agregar</span>
+          </button>
+        </div>
+        <div className="table-container">
+          <Table
+            items={sortedAndFilteredAlumnos}
+            columns={columnsWithProps}
+            className="is-fullwidth is-striped is-hoverable is-bordered"
           />
         </div>
-        <button
-          className="button ml-3 is-responsive is-outlined color-boton-searchbar"
-          onClick={openModal}
-        >
-          Agregar
-        </button>
-      </div>
-      <div className="table-container">
-        <Table
-          items={sortedAndFilteredAlumnos}
-          columns={columnsWithProps}
-          className="is-fullwidth is-striped is-hoverable is-bordered"
-        />
-      </div>
+      </section>
+
       <div>
         <AlumnoModal
           isOpen={isModalOpen}
@@ -285,6 +325,7 @@ function Home() {
           isCreating={isCreating}
         />
       </div>
+      <Loading isLoading={loading} />
       <Footer />
     </div>
   );

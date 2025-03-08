@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { EjercicioType } from "../types";
 import api from "../api";
+import "../styles/EjercicioModal.css";
 
 interface EjercicioModalProps {
   isOpen: boolean;
@@ -20,7 +21,6 @@ const EjercicioModal: React.FC<EjercicioModalProps> = ({
   const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [imagen, setImagen] = useState<File | null>(null);
-  const [imagenPreview, setImagenPreview] = useState<string | null>(null);
 
   // Helper function to get the correct image URL
   const getImageUrl = (path: string | null) => {
@@ -39,15 +39,11 @@ const EjercicioModal: React.FC<EjercicioModalProps> = ({
     if (ejercicioToEdit) {
       setNombre(ejercicioToEdit.nombre);
       setDescripcion(ejercicioToEdit.descripcion);
-
-      // Use the helper function to get the correct image URL
-      setImagenPreview(getImageUrl(ejercicioToEdit.imagen));
     } else {
       // Reset form for create mode
       setNombre("");
       setDescripcion("");
       setImagen(null);
-      setImagenPreview(null);
     }
   }, [ejercicioToEdit]);
 
@@ -74,7 +70,6 @@ const EjercicioModal: React.FC<EjercicioModalProps> = ({
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setImagen(file);
-      setImagenPreview(URL.createObjectURL(file));
     }
   };
 
@@ -146,17 +141,31 @@ const EjercicioModal: React.FC<EjercicioModalProps> = ({
               </div>
             </div>
 
-            <div className="field is-grouped">
-              <div className="control">
-                <button className="button is-primary" type="submit">
+            <div className="field">
+              <div
+                className="control has-text-centered"
+                style={{ width: "100%" }}
+              >
+                <button
+                  className="button is-primary"
+                  type="submit"
+                  style={{ width: "100%" }}
+                >
                   {ejercicioToEdit ? "Guardar Cambios" : "Crear Ejercicio"}
                 </button>
               </div>
-              <div className="control">
+            </div>
+
+            <div className="field">
+              <div
+                className="control has-text-centered"
+                style={{ width: "100%" }}
+              >
                 <button
                   className="button is-light"
                   type="button"
                   onClick={onClose}
+                  style={{ width: "100%" }}
                 >
                   Cancelar
                 </button>

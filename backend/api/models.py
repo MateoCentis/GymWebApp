@@ -98,10 +98,20 @@ class CuotaAlumno(models.Model):
         return self.fecha_pago + timedelta(days=30)
     
     def save(self, *args, **kwargs):
+        # If payment status changed to paid
+        if self.pagada and not self.fecha_pago:
+            self.fecha_pago = date.today()
+            
+        # If the payment is marked as paid, ensure the expiration date is set
         if self.pagada and self.fecha_pago:
             self.fecha_vencimiento_cuota = self.calcular_fecha_vencimiento()
             # Ensure monto_pagado is set when marking as paid
             if not self.monto_pagado:
                 self.monto_pagado = self.monto_final_cuota()
+        
+        # If marked as unpaid, clear payment-related fields
+        if not self.pagada:
+            self.monto_pagado = None
+            
         super().save(*args, **kwargs)
 

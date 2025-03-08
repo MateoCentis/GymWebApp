@@ -34,6 +34,17 @@
   text-align: center;
 }
 
+/* Update modal header styling to match across all modals */
+.modal-card-head {
+  background-color: var(--accent-color) !important;
+  border-bottom: none;
+}
+
+.modal-card-title {
+  color: white !important;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .modal-card-body .field {
     margin-bottom: 0.8rem;

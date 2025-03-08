@@ -1,0 +1,126 @@
+/* Ejercicio Modal styles matching AlumnoModal */
+.modal-card-body {
+  padding: 20px;
+}
+
+.modal-card-body .field {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.modal-card-body .label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+
+.modal-card-body .input,
+.modal-card-body .textarea {
+  width: 100%;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.modal-card-body .input:focus,
+.modal-card-body .textarea:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.125em rgba(72, 95, 199, 0.25);
+}
+
+.modal-card-body .is-grouped {
+  display: flex;
+  align-items: center;
+}
+
+.modal-card-body .button.is-primary {
+  width: 100%;
+  padding: 0.8rem;
+  font-weight: bold;
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.modal-card-body .button.is-light {
+  background-color: transparent;
+  border-color: #dbdbdb;
+  width: 100%;
+}
+
+.has-text-centered {
+  text-align: center;
+}
+
+/* File input styling */
+.file-label {
+  width: 100%;
+  display: flex;
+}
+
+.file-cta {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.file-name {
+  flex-grow: 1;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-color: rgba(255, 255, 255, 0.2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Select styling for ejercicio alumno modal */
+.ejercicio-alumno-select .select,
+.ejercicio-alumno-select .select select {
+  width: 100%;
+}
+
+.ejercicio-alumno-select .select select {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ejercicio-alumno-select .select select:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.125em rgba(72, 95, 199, 0.25);
+}
+
+/* Modal header styling - updated for all modals */
+.modal-card-head {
+  background-color: var(--accent-color) !important;
+  border-bottom: none;
+}
+
+.modal-card-title {
+  color: white !important;
+  font-weight: 600;
+}
+
+/* Make buttons full width in all modals */
+.modal-card-body .field .control.has-text-centered {
+  width: 100%;
+}
+
+.modal-card-body .field .control.has-text-centered .button {
+  width: 100%;
+}
+
+/* Modal header styling */
+.modal-card-head {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+.modal-card-title {
+  color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+  .modal-card-body .field {
+    margin-bottom: 0.8rem;
+  }
+}
