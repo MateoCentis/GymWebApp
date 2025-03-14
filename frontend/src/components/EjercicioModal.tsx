@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { EjercicioType } from "../types";
-import api from "../api";
+// import api from "../api";
 import "../styles/EjercicioModal.css";
 
 interface EjercicioModalProps {

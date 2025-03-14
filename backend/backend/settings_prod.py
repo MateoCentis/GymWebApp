@@ -8,7 +8,7 @@ from .settings import *
 DEBUG = os.environ.get('DEBUG', '0') == '1'
 
 # Allow specific hosts
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost 127.0.0.1').split(' ')
+ALLOWED_HOSTS = ['*']  # Allow all hosts in production for local deployment
 
 # Static files configuration for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -18,27 +18,32 @@ STATIC_URL = '/static/'
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Configure to serve React app
-TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, '..', 'frontend', 'dist')]
+# Configure to serve React app - using absolute paths to avoid issues
+TEMPLATES[0]['DIRS'] = [
+    os.path.join(BASE_DIR, '..', 'frontend', 'dist'),
+    os.path.join(BASE_DIR, 'templates'),
+]
 
 # Security settings
-SESSION_COOKIE_SECURE = os.environ.get('SECURE_COOKIES', '0') == '1'
-CSRF_COOKIE_SECURE = os.environ.get('SECURE_COOKIES', '0') == '1'
+SESSION_COOKIE_SECURE = False  # Set to True if using HTTPS
+CSRF_COOKIE_SECURE = False  # Set to True if using HTTPS
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# CORS settings - adjust as needed for Docker networking
-CORS_ALLOW_ALL_ORIGINS = False
+# CORS settings - allow all origins in production for local deployment
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 # JWT settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),  # Longer lifetime for production
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
@@ -70,3 +75,11 @@ LOGGING = {
 
 # Serve React app from root URL
 WHITENOISE_INDEX_FILE = True
+ROOT_URLCONF = 'backend.urls'
+
+# Make sure media files are served in production
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Enable serving static files even with DEBUG=False
+WHITENOISE_USE_FINDERS = True

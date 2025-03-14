@@ -17,10 +17,10 @@ import {
   Legend,
   ChartData,
 } from "chart.js";
-import { Line, Bar, Pie } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 import "../styles/Title.css";
 import "../styles/DatosPage.css";
-import { MonthlyData, PlanData, ExerciseData, MonthlyPlanData } from "../types";
+import { MonthlyData, ExerciseData } from "../types";
 
 ChartJS.register(
   CategoryScale,
@@ -45,7 +45,6 @@ function DatosPage() {
 
   // Chart data
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
-  const [planDistribution, setPlanDistribution] = useState<PlanData[]>([]);
   const [exerciseStats, setExerciseStats] = useState<ExerciseData[]>([]);
 
   // date/time for the top of the page
@@ -56,15 +55,10 @@ function DatosPage() {
     useState<number>(currentYear);
   const [selectedYearPayment, setSelectedYearPayment] =
     useState<number>(currentYear);
-  const [selectedMonthPlan, setSelectedMonthPlan] = useState<number>(
-    new Date().getMonth() + 1
-  );
+
   const [selectedExercise, setSelectedExercise] = useState<number | "all">(
     "all"
   );
-
-  // Add state for monthly plan data (mock data)
-  const [monthlyPlanData, setMonthlyPlanData] = useState<MonthlyPlanData[]>([]);
 
   // Update current date/time every minute
   useEffect(() => {
@@ -113,30 +107,6 @@ function DatosPage() {
       }
 
       try {
-        // Fetch plan distribution data AND create monthly plan data
-        const planDataResponse = await api.get(
-          `/api/stats/plan-distribution/?year=${year}`
-        );
-        setPlanDistribution(planDataResponse.data || []);
-
-        // Create monthly plan data by randomly distributing plans across months (TODO)
-        const monthlyPlans: MonthlyPlanData[] = [];
-        for (let month = 1; month <= 12; month++) {
-          const monthPlans = [
-            { plan: 2, count: Math.floor(Math.random() * 15) + 5 },
-            { plan: 3, count: Math.floor(Math.random() * 20) + 10 },
-            { plan: 4, count: Math.floor(Math.random() * 10) + 3 },
-            { plan: 5, count: Math.floor(Math.random() * 8) + 2 },
-          ];
-          monthlyPlans.push({ month, planDistribution: monthPlans });
-        }
-        setMonthlyPlanData(monthlyPlans);
-      } catch (err) {
-        console.error("Error fetching plan distribution data:", err);
-        hasError = true;
-      }
-
-      try {
         const exerciseStatsResponse = await api.get(
           `/api/stats/exercise-stats/?year=${year}`
         );
@@ -172,10 +142,6 @@ function DatosPage() {
 
   const handleYearPaymentChange = (year: number) => {
     setSelectedYearPayment(year);
-  };
-
-  const handleMonthPlanChange = (month: number) => {
-    setSelectedMonthPlan(month);
   };
 
   const handleExerciseChange = (exerciseIndex: number) => {
@@ -253,37 +219,6 @@ function DatosPage() {
     ],
   };
 
-  // Format data for Plan Distribution Pie Chart - for the selected month
-  const selectedMonthData = monthlyPlanData.find(
-    (m) => m.month === selectedMonthPlan
-  ) || {
-    month: selectedMonthPlan,
-    planDistribution: [],
-  };
-
-  const planDistributionData: ChartData<"pie"> = {
-    labels: selectedMonthData.planDistribution.map((d) => `${d.plan} días`),
-    datasets: [
-      {
-        label: "Cantidad de Alumnos",
-        data: selectedMonthData.planDistribution.map((d) => d.count),
-        backgroundColor: [
-          "rgba(75, 192, 192, 0.7)",
-          "rgba(153, 102, 255, 0.7)",
-          "rgba(255, 159, 64, 0.7)",
-          "rgba(255, 99, 132, 0.7)",
-        ],
-        borderColor: [
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-          "rgba(255, 99, 132, 1)",
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-
   // Format data for Exercise Statistics Bar Chart - with exercise filter
   const filteredExerciseStats =
     selectedExercise === "all"
@@ -317,24 +252,6 @@ function DatosPage() {
     value: year,
     label: year.toString(),
   }));
-
-  const monthOptions = [
-    { value: -1, label: "Todos los meses" },
-    { value: 1, label: "Enero" },
-    { value: 2, label: "Febrero" },
-    { value: 3, label: "Marzo" },
-    { value: 4, label: "Abril" },
-    { value: 5, label: "Mayo" },
-    { value: 6, label: "Junio" },
-    { value: 7, label: "Julio" },
-    { value: 8, label: "Agosto" },
-    { value: 9, label: "Septiembre" },
-    { value: 10, label: "Octubre" },
-    { value: 11, label: "Noviembre" },
-    { value: 12, label: "Diciembre" },
-  ];
-
-  const monthOnlyOptions = monthOptions.filter((m) => m.value !== -1);
 
   const exerciseOptions = [
     { value: -1, label: "Todos los ejercicios" },
@@ -529,49 +446,6 @@ function DatosPage() {
                           grid: {
                             color: "rgba(255, 255, 255, 0.1)", // Light grid lines
                           },
-                        },
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-
-              {/* Plan Distribution Pie Chart */}
-              <div className="chart-card">
-                <div className="chart-header">
-                  <h3 className="chart-title">Distribución de Planes</h3>
-                  <div className="chart-filter">
-                    <Select
-                      options={monthOnlyOptions}
-                      selectedValue={selectedMonthPlan}
-                      onChange={handleMonthPlanChange}
-                      label=""
-                      className="chart-select is-small"
-                      includeDefaultOption={false}
-                    />
-                  </div>
-                </div>
-                <div className="chart-body">
-                  <Pie
-                    data={planDistributionData}
-                    options={{
-                      responsive: true,
-                      maintainAspectRatio: false,
-                      plugins: {
-                        legend: {
-                          position: "right",
-                          labels: {
-                            color: "#e0e0e0", // Light text for dark theme
-                          },
-                        },
-                        title: {
-                          display: true,
-                          text: `Distribución de Planes - ${
-                            monthOptions.find(
-                              (m) => m.value === selectedMonthPlan
-                            )?.label
-                          } ${selectedYear}`,
-                          color: "#e0e0e0", // Light text for dark theme
                         },
                       },
                     }}

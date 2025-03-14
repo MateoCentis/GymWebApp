@@ -9,12 +9,19 @@ if not exist venv (
     exit /b 1
 )
 
-:: Check if frontend is built
-if not exist frontend\dist (
+:: Check if frontend build exists - look in the dist directory, not the folder itself
+if not exist frontend\dist\index.html (
     echo Frontend build not found.
-    echo Please run deploy.bat first to build the frontend.
-    pause
-    exit /b 1
+    echo Running build process...
+    call venv\Scripts\activate
+    cd frontend
+    call npm run build:prod
+    cd ..
+    if not exist frontend\dist\index.html (
+        echo Failed to build frontend. Please check for errors.
+        pause
+        exit /b 1
+    )
 )
 
 :: Activate virtual environment
@@ -29,7 +36,7 @@ if %ERRORLEVEL% NEQ 0 (
 echo Starting Django with production settings...
 cd backend
 set DJANGO_SETTINGS_MODULE=backend.settings_prod
-start cmd /k "python manage.py runserver"
+start cmd /k "python manage.py runserver 0.0.0.0:8000"
 if %ERRORLEVEL% NEQ 0 (
     echo Failed to start Django server.
     cd ..
@@ -38,22 +45,11 @@ if %ERRORLEVEL% NEQ 0 (
 )
 cd ..
 
-:: Serve React build using a simple HTTP server
-echo Starting HTTP server for the frontend...
-cd frontend\dist
-start cmd /k "python -m http.server 3000"
-if %ERRORLEVEL% NEQ 0 (
-    echo Failed to start the HTTP server for the frontend.
-    cd ..\..
-    pause
-    exit /b 1
-)
-cd ..\..
-
+:: Serve React build using Django's static files
+echo Django server is hosting the frontend at http://localhost:8000
 echo.
 echo Application started!
-echo - Frontend: http://localhost:3000
-echo - Backend API: http://localhost:8000/api
+echo - Frontend and API: http://localhost:8000
 echo - Django Admin: http://localhost:8000/admin
 echo.
 echo Press any key to close this window. The servers will continue running.

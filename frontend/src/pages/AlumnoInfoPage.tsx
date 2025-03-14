@@ -9,7 +9,7 @@ import {
   AlumnoType,
   CuotaAlumnoType,
   EjercicioAlumnoType,
-  EjercicioType,
+  // EjercicioType,
 } from "../types";
 import "../styles/AlumnoInfoPage.css";
 import { formatDateToDDMMYYYY } from "../utils/dateUtils";
@@ -34,7 +34,7 @@ const AlumnoInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [alumno, setAlumno] = useState<AlumnoDetailType | null>(null);
-  const [ejercicios, setEjercicios] = useState<EjercicioType[]>([]);
+  // const [ejercicios, setEjercicios] = useState<EjercicioType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("pagos"); // "pagos" or "ejercicios"
@@ -48,8 +48,8 @@ const AlumnoInfoPage = () => {
         setAlumno(alumnoResponse.data);
 
         // Fetch ejercicios for reference
-        const ejerciciosResponse = await api.get("/api/ejercicios/");
-        setEjercicios(ejerciciosResponse.data);
+        // const ejerciciosResponse = await api.get("/api/ejercicios/");
+        // setEjercicios(ejerciciosResponse.data);
       } catch (err: any) {
         setError(`Error loading data: ${err.message}`);
         console.error("Error fetching alumno details:", err);

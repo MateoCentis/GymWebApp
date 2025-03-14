@@ -1,8 +1,8 @@
 /* DatosPage Styling */
 
 .datos-container {
-  padding: 0 1.5rem 2rem;
-  max-width: 1400px;
+  padding: 2rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -32,11 +32,24 @@
   display: none;
 }
 
+.year-selector {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
 /* Charts grid layout */
 .charts-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
+}
+
+.statistics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
 }
 
 /* Card styling for each chart */
@@ -146,6 +159,31 @@
   flex-wrap: wrap; /* Allow wrapping for the exercise statistics chart */
 }
 
+.chart-section {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.titulo-seccion {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: center;
+}
+
+.chart-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  margin: 0 auto;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .charts-container {
@@ -164,7 +202,23 @@
   }
 }
 
+@media (min-width: 1024px) {
+  .statistics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .full-width {
+    grid-column: span 2;
+  }
+}
+
 @media (max-width: 768px) {
+  .datos-container {
+    padding: 1rem;
+  }
+
   .chart-body {
     height: 300px;
   }
@@ -178,4 +232,14 @@
   .chart-filter {
     width: 100%; /* Full width on mobile */
   }
+
+  .chart-container {
+    height: 300px;
+  }
+}
+
+/* Specific styles for exercise chart to ensure full width */
+.exercise-stats-chart .chart-container {
+  width: 100% !important;
+  margin: 0 !important;
 }
