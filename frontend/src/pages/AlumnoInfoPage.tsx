@@ -30,7 +30,7 @@ interface AlumnoDetailType extends AlumnoType {
   })[];
 }
 
-function AlumnoInfoPage() {
+const AlumnoInfoPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [alumno, setAlumno] = useState<AlumnoDetailType | null>(null);
@@ -132,28 +132,9 @@ function AlumnoInfoPage() {
   ];
 
   // Table columns for ejercicios
-  const ejerciciosColumns = [
-    {
-      title: "Ejercicio",
-      key: "ejercicio_nombre",
-      render: (
-        item: EjercicioAlumnoType & { ejercicio_info?: { nombre: string } }
-      ) =>
-        item.ejercicio_info
-          ? item.ejercicio_info.nombre
-          : `ID: ${item.ejercicio}`,
-    },
-    {
-      title: "Fecha",
-      key: "fecha",
-      render: (item: EjercicioAlumnoType) => formatDateToDDMMYYYY(item.fecha),
-    },
-    {
-      title: "Peso (kg)",
-      key: "peso_repeticion_maxima",
-      render: (item: EjercicioAlumnoType) => item.peso_repeticion_maxima,
-    },
-  ];
+  // const ejerciciosColumns = [
+  //   // Column definitions for future exercise table implementation
+  // ];
 
   // Get ejercicio image URL
   const getImageUrl = (path: string | null): string | undefined => {
@@ -321,6 +302,6 @@ function AlumnoInfoPage() {
       <Footer />
     </div>
   );
-}
+};
 
 export default AlumnoInfoPage;

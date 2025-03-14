@@ -23,17 +23,10 @@ const EjercicioModal: React.FC<EjercicioModalProps> = ({
   const [imagen, setImagen] = useState<File | null>(null);
 
   // Helper function to get the correct image URL
-  const getImageUrl = (path: string | null) => {
-    if (!path) return null;
-
-    // If the path already includes the full URL, return it as is
-    if (path.startsWith("http")) {
-      return path;
-    }
-
-    // If the path is just the relative path, prepend the base URL
-    return `${api.defaults.baseURL}${path}`;
-  };
+  // const getImageUrl = (path: string | null) => {
+  //   if (!path) return "";
+  //   return `${import.meta.env.VITE_API_BASE_URL}${path}`;
+  // };
 
   useEffect(() => {
     if (ejercicioToEdit) {

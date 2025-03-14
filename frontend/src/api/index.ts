@@ -1,34 +1,24 @@
 import axios from "axios";
 
-// Create axios instance
+// Create an axios instance with a base URL
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8000",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Add request interceptor to include authentication token in all requests
+// Add a request interceptor to include the JWT token in requests
 api.interceptors.request.use((config) => {
+  // Get the token from localStorage
   const token = localStorage.getItem("token");
+
+  // If token exists, add it to the Authorization header
   if (token) {
-    config.headers.Authorization = `Token ${token}`;
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
-
-// Add response interceptor for handling common errors
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // Handle authentication errors
-    if (error.response?.status === 401) {
-      console.error("Authentication error:", error);
-      // Log the error but don't redirect in this case
-      // as we want to show the error in the UI
-    }
-    return Promise.reject(error);
-  }
-);
 
 export default api;
