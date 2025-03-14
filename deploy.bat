@@ -14,11 +14,17 @@ if %ERRORLEVEL% NEQ 0 (
 
 :: Check if requirements.txt exists
 if not exist "%~dp0requirements.txt" (
-    echo Error: Cannot find requirements.txt in the current directory.
-    echo Current directory is: %CD%
-    echo Looking for: %~dp0requirements.txt
-    pause
-    exit /b 1
+    echo Warning: Cannot find requirements.txt in the current directory.
+    echo Looking for requirements in the backend directory instead.
+    
+    if not exist "%~dp0backend\requirements.txt" (
+        echo Error: Cannot find requirements.txt in the backend directory either.
+        echo Current directory is: %CD%
+        pause
+        exit /b 1
+    ) else {
+        echo Found requirements.txt in backend directory.
+    }
 )
 
 :: Create and activate virtual environment
@@ -51,9 +57,15 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-:: Install Python dependencies
-echo Installing Python dependencies from %~dp0requirements.txt
-pip install -r "%~dp0requirements.txt"
+:: Install Python dependencies (try both possible locations)
+if exist "%~dp0requirements.txt" (
+    echo Installing Python dependencies from %~dp0requirements.txt
+    pip install -r "%~dp0requirements.txt"
+) else (
+    echo Installing Python dependencies from %~dp0backend\requirements.txt
+    pip install -r "%~dp0backend\requirements.txt"
+)
+
 if %ERRORLEVEL% NEQ 0 (
     echo Failed to install Python dependencies.
     echo Make sure requirements.txt exists and is valid.
@@ -79,12 +91,19 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
+:: Make sure static files directory exists
+if not exist "%~dp0backend\staticfiles" (
+    echo Creating staticfiles directory...
+    mkdir "%~dp0backend\staticfiles"
+)
+
+:: Collect static files with proper error handling
+echo Collecting static files...
 python manage.py collectstatic --noinput
 if %ERRORLEVEL% NEQ 0 (
-    echo Failed to collect static files.
-    cd "%~dp0"
-    pause
-    exit /b 1
+    echo Warning: Failed to collect static files.
+    echo This may be due to misconfigured STATIC_ROOT settings.
+    echo Continuing with installation...
 )
 cd "%~dp0"
 
