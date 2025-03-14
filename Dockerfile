@@ -8,7 +8,7 @@ RUN npm install
 
 # Copy frontend source and build
 COPY frontend/ ./
-RUN npm run build
+RUN npm run build:prod
 
 # Main stage with Python for Django backend
 FROM python:3.11-slim
@@ -22,7 +22,7 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc && \
+    apt-get install -y --no-install-recommends gcc curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -37,11 +37,15 @@ COPY backend/ /app/backend/
 COPY --from=frontend-build /app/frontend/dist /app/frontend/dist
 
 # Collect Django static files
-RUN python backend/manage.py collectstatic --noinput --clear
+WORKDIR /app/backend
+RUN python manage.py collectstatic --noinput --clear
+WORKDIR /app
 
-# Add entrypoint script
+# Add entrypoint script (Windows-compatible version)
 COPY docker-entrypoint.sh .
-RUN chmod +x docker-entrypoint.sh
+# Convert CRLF to LF (important for Windows)
+RUN sed -i 's/\r$//' docker-entrypoint.sh && \
+    chmod +x docker-entrypoint.sh
 
 EXPOSE 8000
 

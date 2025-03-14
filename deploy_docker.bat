@@ -9,13 +9,31 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b
 )
 
+:: Check Docker is running
+docker info >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo Docker is not running. Please start Docker Desktop.
+    pause
+    exit /b
+)
+
+:: Kill existing containers if they exist
+echo Stopping any existing containers...
+docker-compose down
+
 :: Build and start containers
-docker-compose build
+echo Building containers (this may take a while)...
+docker-compose build --no-cache
+
+echo Starting containers...
 docker-compose up -d
 
+:: Check if containers are running
+timeout /t 5 /nobreak >nul
+docker-compose ps
+
 echo.
-echo Docker containers are now running!
-echo Access the application at:
+echo If the containers are running, you can access the application at:
 echo - http://localhost:8000
 echo.
 echo To view logs:

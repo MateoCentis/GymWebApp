@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    restart: "no"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - django_media:/app/backend/media
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=debug_secret_key
+      - DJANGO_SETTINGS_MODULE=backend.settings_prod
+      - DJANGO_LOG_LEVEL=DEBUG
+    command: python backend/manage.py runserver 0.0.0.0:8000
+    tty: true
+    stdin_open: true
+
+volumes:
+  django_media:
